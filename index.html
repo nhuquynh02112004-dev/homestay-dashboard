@@ -1,4 +1,3 @@
-```html id="a2p9xm"
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -269,6 +268,17 @@ margin-bottom:12px;
 font-size:15px;
 }
 
+.btn-close{
+background:#999;
+float:right;
+padding:6px 12px;
+}
+
+.btn-delete{
+background:#d32f2f;
+margin-top:0;
+}
+
 </style>
 </head>
 
@@ -282,7 +292,7 @@ font-size:15px;
 Operation Dashboard
 </div>
 
-<div class="month">
+<div class="month" id="monthTitle">
 May 2025
 </div>
 
@@ -332,6 +342,8 @@ May 2025
 
 <div class="popup-box">
 
+<button class="btn-close" onclick="closePopup()">✕</button>
+
 <div class="popup-title" id="popupTitle">
 Booking
 </div>
@@ -343,6 +355,10 @@ placeholder="Ghi chú"></textarea>
 
 <button onclick="saveBooking()">
 Lưu booking
+</button>
+
+<button class="btn-delete" onclick="deleteBooking()">
+Xóa booking
 </button>
 
 </div>
@@ -390,7 +406,7 @@ Shitake:[
 
 };
 
-const bookings={};
+let bookings={};
 
 let currentSlot=null;
 
@@ -398,7 +414,7 @@ const calendar=
 document.getElementById('calendar');
 
 const monthTitle=
-document.querySelector('.month');
+document.getElementById('monthTitle');
 
 const months=[
 
@@ -415,7 +431,24 @@ const months=[
 
 let currentMonth=5;
 
+// Load dữ liệu từ localStorage khi trang tải
+function loadData(){
+  const saved=localStorage.getItem('bookings');
+  if(saved){
+    bookings=JSON.parse(saved);
+  }
+}
+
+// Lưu dữ liệu vào localStorage
+function saveData(){
+  localStorage.setItem('bookings', JSON.stringify(bookings));
+}
+
+// Khởi tạo
+loadData();
 renderCalendar(currentMonth);
+renderTimeline();
+renderBookingSheet();
 
 function renderCalendar(month){
 
@@ -427,6 +460,7 @@ months.find(m=>m.month===month);
 monthTitle.innerHTML=
 `${selected.name} 2025`;
 
+// Hiển thị các nút tháng
 months.forEach(m=>{
 
 calendar.innerHTML+=`
@@ -435,7 +469,7 @@ calendar.innerHTML+=`
 
 onclick="changeMonth(${m.month})">
 
-${m.month}
+${m.name.substring(0,3)}
 
 </div>
 
@@ -443,6 +477,7 @@ ${m.month}
 
 });
 
+// Hiển thị các ngày trong tháng theo thứ tự
 for(let i=1;i<=selected.days;i++){
 
 calendar.innerHTML+=`
@@ -452,7 +487,7 @@ ${i===1?'active-date':''}"
 
 onclick="selectDate(this)">
 
-${i}/${month}
+${i}
 
 </div>
 
@@ -520,6 +555,9 @@ Trống
 `;
 
 });
+
+// Render lại booking sheet sau khi load
+renderBookingSheet();
 
 function timeToMinutes(time){
 
@@ -724,21 +762,24 @@ Object.entries(bookings).forEach(([key,data])=>{
 const slot=
 document.getElementById(key);
 
-slot.classList.remove(
-'active',
-'green-slot'
-);
+if(slot){
+  slot.classList.remove(
+  'active',
+  'green-slot'
+  );
 
-if(data.checkedIn){
+  if(data.checkedIn){
 
-slot.classList.add('green-slot');
+  slot.classList.add('green-slot');
 
-}
+  }
+  else{
 
-else{
+  slot.classList.add('active');
 
-slot.classList.add('active');
+  }
 
+  document.getElementById(`${key}-guest`).innerHTML=data.name;
 }
 
 });
@@ -749,10 +790,12 @@ function doneCleaning(room,index){
 
 const key=`${room}-${index}`;
 
-bookings[key].cleaned=true;
-
-renderTimeline();
-renderBookingSheet();
+if(bookings[key]){
+  bookings[key].cleaned=true;
+  saveData();
+  renderTimeline();
+  renderBookingSheet();
+}
 
 }
 
@@ -760,16 +803,21 @@ function guestCheckedIn(room,index){
 
 const key=`${room}-${index}`;
 
-bookings[key].checkedIn=true;
-
-renderTimeline();
-renderBookingSheet();
+if(bookings[key]){
+  bookings[key].checkedIn=true;
+  saveData();
+  renderTimeline();
+  renderBookingSheet();
+}
 
 }
 
 function openPopup(room,index){
 
 currentSlot={room,index};
+
+const key=`${room}-${index}`;
+const booking=bookings[key];
 
 document.getElementById('popup')
 .style.display='flex';
@@ -778,6 +826,21 @@ document.getElementById('popupTitle')
 .innerHTML=
 `${room} - Ca ${index+1}`;
 
+// Nếu có booking rồi, load dữ liệu cũ
+if(booking){
+  document.getElementById('guestName').value=booking.name;
+  document.getElementById('guestNote').value=booking.note||'';
+  document.querySelector('.btn-delete').style.display='block';
+}else{
+  document.getElementById('guestName').value='';
+  document.getElementById('guestNote').value='';
+  document.querySelector('.btn-delete').style.display='none';
+}
+
+}
+
+function closePopup(){
+  document.getElementById('popup').style.display='none';
 }
 
 function saveBooking(){
@@ -788,6 +851,11 @@ document.getElementById('guestName').value;
 const note=
 document.getElementById('guestNote').value;
 
+if(!name.trim()){
+  alert('Vui lòng nhập tên khách');
+  return;
+}
+
 bookings[
 `${currentSlot.room}-${currentSlot.index}`
 ]={
@@ -797,13 +865,7 @@ checkedIn:false,
 cleaned:false
 };
 
-document.getElementById(
-`${currentSlot.room}-${currentSlot.index}`
-).classList.add('active');
-
-document.getElementById(
-`${currentSlot.room}-${currentSlot.index}-guest`
-).innerHTML=name;
+saveData();
 
 document.getElementById('popup')
 .style.display='none';
@@ -816,6 +878,16 @@ renderBookingSheet();
 
 }
 
+function deleteBooking(){
+  if(confirm('Bạn chắc chắn muốn xóa booking này?')){
+    delete bookings[`${currentSlot.room}-${currentSlot.index}`];
+    saveData();
+    closePopup();
+    renderTimeline();
+    renderBookingSheet();
+  }
+}
+
 renderTimeline();
 
 setInterval(renderTimeline,60000);
@@ -824,4 +896,3 @@ setInterval(renderTimeline,60000);
 
 </body>
 </html>
-```
