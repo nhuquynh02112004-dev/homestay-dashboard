@@ -18,8 +18,8 @@
 
 body{
   background:#355b3e;
-  padding:16px;
   color:white;
+  padding:16px;
 }
 
 .header{
@@ -36,26 +36,45 @@ body{
   margin-top:6px;
 }
 
+.month{
+  font-size:20px;
+  margin-bottom:12px;
+  font-weight:bold;
+}
+
 .calendar{
   display:flex;
   gap:10px;
   overflow:auto;
-  margin-bottom:20px;
+  margin-bottom:24px;
 }
 
 .day{
   min-width:70px;
-  background:rgba(255,255,255,0.12);
-  border-radius:18px;
   padding:14px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.12);
   text-align:center;
-  backdrop-filter:blur(10px);
+  cursor:pointer;
 }
 
-.active{
+.day.active{
   background:white;
   color:#355b3e;
   font-weight:bold;
+}
+
+.layout{
+  display:grid;
+  gap:20px;
+}
+
+@media(min-width:1000px){
+
+.layout{
+  grid-template-columns:1.1fr 0.9fr;
+}
+
 }
 
 .section{
@@ -63,13 +82,55 @@ body{
   color:#222;
   border-radius:24px;
   padding:18px;
-  margin-bottom:20px;
 }
 
 .section-title{
   font-size:22px;
   font-weight:bold;
   margin-bottom:18px;
+}
+
+.sheet{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  padding-bottom:14px;
+  text-align:left;
+  color:#777;
+}
+
+td{
+  padding:16px 10px;
+  border-top:1px solid #eee;
+  text-align:center;
+}
+
+.room{
+  font-weight:bold;
+  text-align:left;
+}
+
+.slot{
+  background:#f5f5f5;
+  border-radius:12px;
+  cursor:pointer;
+  min-width:120px;
+}
+
+.slot:hover{
+  background:#e9ecef;
+}
+
+.slot-name{
+  font-size:13px;
+  color:#888;
+  margin-top:6px;
 }
 
 .timeline{
@@ -91,10 +152,6 @@ body{
   background:#f5f5f5;
 }
 
-.yellow{
-  background:#fff3bf;
-}
-
 .red{
   background:#ffc9c9;
 }
@@ -114,13 +171,13 @@ body{
   font-weight:bold;
 }
 
-.room{
+.event-title{
   font-weight:bold;
 }
 
 .sub{
-  color:#666;
   font-size:14px;
+  color:#666;
 }
 
 button{
@@ -130,53 +187,44 @@ button{
   background:#2b8a3e;
   color:white;
   font-weight:bold;
+  cursor:pointer;
 }
 
-table{
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.popup-box{
+  background:white;
+  color:black;
   width:100%;
-  border-collapse:collapse;
+  max-width:400px;
+  border-radius:24px;
+  padding:20px;
 }
 
-th{
-  text-align:left;
-  padding-bottom:14px;
-  color:#777;
+.popup-title{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:14px;
 }
 
-td{
-  padding:14px 0;
-  border-top:1px solid #eee;
-}
-
-.note{
-  color:#888;
-  font-size:13px;
-}
-
-.add{
-  margin-top:18px;
-  display:grid;
-  gap:10px;
-}
-
-input{
+input, textarea{
+  width:100%;
   padding:14px;
   border-radius:14px;
   border:1px solid #ddd;
+  margin-bottom:12px;
 }
 
-.add-btn{
-  background:#355b3e;
-}
-
-@media(min-width:900px){
-
-.wrapper{
-  display:grid;
-  grid-template-columns:1.1fr 0.9fr;
-  gap:20px;
-}
-
+.save-btn{
+  width:100%;
 }
 
 </style>
@@ -191,17 +239,26 @@ input{
   </div>
 </div>
 
-<div class="calendar">
-  <div class="day">27</div>
-  <div class="day active">28</div>
-  <div class="day">29</div>
-  <div class="day">30</div>
-  <div class="day">31</div>
+<div class="month">
+May 2025
 </div>
 
-<div class="wrapper">
+<div class="calendar">
 
-<div>
+<div class="day">27</div>
+<div class="day active">28</div>
+<div class="day">29</div>
+<div class="day">30</div>
+<div class="day">31</div>
+
+<div class="day">1/6</div>
+<div class="day">2/6</div>
+<div class="day">3/6</div>
+<div class="day">4/6</div>
+
+</div>
+
+<div class="layout">
 
 <div class="section">
 
@@ -209,205 +266,141 @@ input{
 📋 Booking Sheet
 </div>
 
+<div class="sheet">
+
 <table>
 
 <tr>
 <th>Room</th>
-<th>Khung giờ</th>
-<th>Note</th>
+<th>Ca 1</th>
+<th>Ca 2</th>
+<th>Ca 3</th>
+<th>Đêm</th>
 </tr>
 
 <tr>
-<td>Midori</td>
-<td>10:00 - 13:00</td>
-<td class="note">Ca 1</td>
+
+<td class="room">Midori</td>
+
+<td>
+<div class="slot" onclick="openPopup('Midori - Ca 1')">
+10:00 - 13:00
+<div class="slot-name">
+Tap để note
+</div>
+</div>
+</td>
+
+<td>
+<div class="slot" onclick="openPopup('Midori - Ca 2')">
+13:30 - 16:30
+<div class="slot-name">
+Tap để note
+</div>
+</div>
+</td>
+
+<td>
+<div class="slot" onclick="openPopup('Midori - Ca 3')">
+17:00 - 20:00
+<div class="slot-name">
+Tap để note
+</div>
+</div>
+</td>
+
+<td>
+<div class="slot" onclick="openPopup('Midori - Đêm')">
+20:30 - 09:30
+<div class="slot-name">
+Tap để note
+</div>
+</div>
+</td>
+
 </tr>
 
 <tr>
-<td>Midori</td>
-<td>13:30 - 16:30</td>
-<td class="note">Ca 2</td>
+
+<td class="room">Truffle</td>
+
+<td><div class="slot" onclick="openPopup('Truffle - Ca 1')">10:30 - 13:30</div></td>
+
+<td><div class="slot" onclick="openPopup('Truffle - Ca 2')">14:00 - 17:00</div></td>
+
+<td><div class="slot" onclick="openPopup('Truffle - Ca 3')">17:30 - 20:30</div></td>
+
+<td><div class="slot" onclick="openPopup('Truffle - Đêm')">21:00 - 10:00</div></td>
+
 </tr>
 
 <tr>
-<td>Midori</td>
-<td>17:00 - 20:00</td>
-<td class="note">Ca 3</td>
+
+<td class="room">Matutake</td>
+
+<td><div class="slot" onclick="openPopup('Matutake - Ca 1')">11:00 - 14:00</div></td>
+
+<td><div class="slot" onclick="openPopup('Matutake - Ca 2')">14:30 - 17:30</div></td>
+
+<td><div class="slot" onclick="openPopup('Matutake - Ca 3')">18:00 - 21:00</div></td>
+
+<td><div class="slot" onclick="openPopup('Matutake - Đêm')">21:30 - 10:30</div></td>
+
 </tr>
 
 <tr>
-<td>Midori</td>
-<td>20:30 - 09:30</td>
-<td class="note">Ca đêm</td>
+
+<td class="room">Porcini</td>
+
+<td><div class="slot" onclick="openPopup('Porcini - Ca 1')">11:30 - 14:30</div></td>
+
+<td><div class="slot" onclick="openPopup('Porcini - Ca 2')">15:00 - 18:00</div></td>
+
+<td><div class="slot" onclick="openPopup('Porcini - Ca 3')">18:30 - 21:30</div></td>
+
+<td><div class="slot" onclick="openPopup('Porcini - Đêm')">22:00 - 11:00</div></td>
+
 </tr>
 
 <tr>
-<td>Truffle</td>
-<td>10:30 - 13:30</td>
-<td class="note">Ca 1</td>
-</tr>
 
-<tr>
-<td>Truffle</td>
-<td>14:00 - 17:00</td>
-<td class="note">Ca 2</td>
-</tr>
+<td class="room">Shitake</td>
 
-<tr>
-<td>Truffle</td>
-<td>17:30 - 20:30</td>
-<td class="note">Ca 3</td>
-</tr>
+<td><div class="slot" onclick="openPopup('Shitake - Ca 1')">12:00 - 15:00</div></td>
 
-<tr>
-<td>Truffle</td>
-<td>21:00 - 10:00</td>
-<td class="note">Ca đêm</td>
-</tr>
+<td><div class="slot" onclick="openPopup('Shitake - Ca 2')">15:30 - 18:30</div></td>
 
-<tr>
-<td>Matutake</td>
-<td>11:00 - 14:00</td>
-<td class="note">Ca 1</td>
-</tr>
+<td><div class="slot" onclick="openPopup('Shitake - Ca 3')">19:00 - 22:00</div></td>
 
-<tr>
-<td>Matutake</td>
-<td>14:30 - 17:30</td>
-<td class="note">Ca 2</td>
-</tr>
+<td><div class="slot" onclick="openPopup('Shitake - Đêm')">22:30 - 11:30</div></td>
 
-<tr>
-<td>Matutake</td>
-<td>18:00 - 21:00</td>
-<td class="note">Ca 3</td>
-</tr>
-
-<tr>
-<td>Matutake</td>
-<td>21:30 - 10:30</td>
-<td class="note">Ca đêm</td>
-</tr>
-
-<tr>
-<td>Porcini</td>
-<td>11:30 - 14:30</td>
-<td class="note">Ca 1</td>
-</tr>
-
-<tr>
-<td>Porcini</td>
-<td>15:00 - 18:00</td>
-<td class="note">Ca 2</td>
-</tr>
-
-<tr>
-<td>Porcini</td>
-<td>18:30 - 21:30</td>
-<td class="note">Ca 3</td>
-</tr>
-
-<tr>
-<td>Porcini</td>
-<td>22:00 - 11:00</td>
-<td class="note">Ca đêm</td>
-</tr>
-
-<tr>
-<td>Shitake</td>
-<td>12:00 - 15:00</td>
-<td class="note">Ca 1</td>
-</tr>
-
-<tr>
-<td>Shitake</td>
-<td>15:30 - 18:30</td>
-<td class="note">Ca 2</td>
-</tr>
-
-<tr>
-<td>Shitake</td>
-<td>19:00 - 22:00</td>
-<td class="note">Ca 3</td>
-</tr>
-
-<tr>
-<td>Shitake</td>
-<td>22:30 - 11:30</td>
-<td class="note">Ca đêm</td>
 </tr>
 
 </table>
 
-<div class="add">
-
-<input placeholder="Tên khách"/>
-
-<input placeholder="Tên phòng"/>
-
-<input placeholder="Check-in"/>
-
-<input placeholder="Check-out"/>
-
-<input placeholder="Note"/>
-
-<button class="add-btn">
-+ Thêm booking
-</button>
-
 </div>
 
 </div>
-
-</div>
-
-<div>
 
 <div class="section">
 
 <div class="section-title">
-⏳ Operation Timeline
+⏳ Timeline dọn phòng
 </div>
 
-<div class="timeline">
-
-<div class="event white">
-
-<div class="left">
-<div class="time">09:30</div>
-<div class="room">
-⚪ Midori chưa tới giờ
-</div>
-<div class="sub">
-Khách out lúc 10:00
-</div>
-</div>
-
-</div>
-
-<div class="event yellow">
-
-<div class="left">
-<div class="time">09:45</div>
-<div class="room">
-🟡 Midori sắp cần dọn
-</div>
-<div class="sub">
-Khách mới lúc 13:00
-</div>
-</div>
-
-</div>
+<div class="timeline" id="timeline">
 
 <div class="event red" id="midori">
 
 <div class="left">
-<div class="time">10:00</div>
-<div class="room">
+<div class="time">13:00</div>
+
+<div class="event-title">
 🔴 Midori cần dọn
 </div>
+
 <div class="sub">
-Ưu tiên phòng này
+🚨 Có khách khung sau 13:30
 </div>
 </div>
 
@@ -420,52 +413,56 @@ Khách mới lúc 13:00
 <div class="event white">
 
 <div class="left">
-<div class="time">10:30</div>
-<div class="room">
+<div class="time">14:00</div>
+
+<div class="event-title">
 ⚪ Truffle chưa tới giờ
 </div>
+
 <div class="sub">
-Khách out lúc 11:00
+Out lúc 14:00
 </div>
 </div>
 
 </div>
 
-<div class="event yellow">
+<div class="event white">
 
 <div class="left">
-<div class="time">10:45</div>
-<div class="room">
-🟡 Truffle sắp cần dọn
+<div class="time">15:00</div>
+
+<div class="event-title">
+⚪ Matutake chưa tới giờ
 </div>
+
 <div class="sub">
-Khách mới lúc 14:00
+Out lúc 15:00
 </div>
 </div>
 
 </div>
 
-<div class="event red" id="truffle">
-
-<div class="left">
-<div class="time">11:00</div>
-<div class="room">
-🔴 Truffle cần dọn
-</div>
-<div class="sub">
-Ưu tiên phòng này
-</div>
 </div>
 
-<button onclick="doneCleaning('truffle', this)">
-Đã dọn xong
+</div>
+
+</div>
+
+<div class="popup" id="popup">
+
+<div class="popup-box">
+
+<div class="popup-title" id="popupTitle">
+Booking
+</div>
+
+<input placeholder="Tên khách"/>
+
+<textarea placeholder="Ghi chú khách"></textarea>
+
+<button class="save-btn" onclick="closePopup()">
+Lưu
 </button>
-
-</div>
-
-</div>
-
-</div>
 
 </div>
 
@@ -473,20 +470,34 @@ Khách mới lúc 14:00
 
 <script>
 
+function openPopup(title){
+
+document.getElementById('popup').style.display='flex';
+
+document.getElementById('popupTitle').innerHTML=title;
+
+}
+
+function closePopup(){
+
+document.getElementById('popup').style.display='none';
+
+}
+
 function doneCleaning(id, btn){
 
-  const room = document.getElementById(id);
+const item=document.getElementById(id);
 
-  room.classList.remove('red');
+item.classList.remove('red');
 
-  room.classList.add('green');
+item.classList.add('green');
 
-  room.querySelector('.room').innerHTML =
-  '🟢 Đã dọn xong';
+item.querySelector('.event-title').innerHTML=
+'🟢 Đã dọn xong';
 
-  btn.innerHTML = 'DONE';
+btn.innerHTML='DONE';
 
-  btn.style.background = '#2f9e44';
+document.getElementById('timeline').appendChild(item);
 
 }
 
