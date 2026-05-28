@@ -12,271 +12,492 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body{
-background:#A8CFA8;
+background:linear-gradient(135deg, #E8D4F8 0%, #D4E8F8 100%);
+min-height:100vh;
+padding:12px;
+color:#333;
+}
+
+.header{
+text-align:center;
+margin-bottom:24px;
+background:white;
+border-radius:20px;
 padding:16px;
-color:white;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.logo-container{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
+margin-bottom:8px;
+}
+
+.logo{
+width:50px;
+height:50px;
 }
 
 .title{
-font-size:32px;
-font-weight:bold;
-margin-bottom:6px;
+font-size:28px;
+font-weight:700;
+background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+margin:0;
 }
 
 .subtitle{
-margin-bottom:20px;
-opacity:0.9;
+font-size:13px;
+color:#999;
+margin-top:4px;
 }
 
-.month{
-font-size:24px;
-font-weight:bold;
-margin-bottom:14px;
-}
-
-.calendar{
+.month-selector{
 display:flex;
-gap:10px;
-overflow:auto;
-padding-bottom:10px;
-margin-bottom:20px;
+gap:8px;
+justify-content:center;
 flex-wrap:wrap;
-}
-
-.day{
-min-width:70px;
-padding:14px;
-border-radius:18px;
-background:rgba(255,255,255,0.2);
-text-align:center;
-font-weight:bold;
-cursor:pointer;
-transition:0.2s;
-}
-
-.day:hover{
-transform:scale(1.03);
+margin:16px 0 0 0;
 }
 
 .month-btn{
-background:#7fb77e;
-color:white;
+padding:8px 14px;
+border:2px solid #E8B4E0;
+background:white;
+color:#D13B92;
+border-radius:12px;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
+font-size:12px;
 }
 
-.active-date{
+.month-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 4px 12px rgba(209, 59, 146, 0.2);
+}
+
+.month-btn.active{
+background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+color:white;
+border-color:#D13B92;
+}
+
+.calendar{
+display:grid;
+grid-template-columns:repeat(auto-fill, minmax(45px, 1fr));
+gap:8px;
+margin:16px 0;
+padding:16px;
 background:white;
-color:#4d6b4d;
+border-radius:20px;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
+max-width:100%;
+}
+
+.day{
+padding:10px 6px;
+border-radius:12px;
+background:#F5E6F3;
+text-align:center;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
+font-size:12px;
+color:#D13B92;
+border:2px solid transparent;
+}
+
+.day:hover{
+transform:scale(1.05);
+background:#E8D4F8;
+}
+
+.day.active-date{
+background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+color:white;
+border-color:#D13B92;
+font-weight:700;
 }
 
 .layout{
 display:grid;
-gap:20px;
+gap:16px;
+margin-bottom:20px;
 }
 
-@media(min-width:1000px){
-
+@media(min-width:768px){
 .layout{
-grid-template-columns:1.1fr 0.9fr;
+grid-template-columns:1.2fr 0.8fr;
+}
 }
 
+@media(max-width:767px){
+.layout{
+grid-template-columns:1fr;
+}
 }
 
 .section{
 background:white;
-color:#222;
-border-radius:24px;
-padding:18px;
+border-radius:20px;
+padding:16px;
+box-shadow:0 4px 15px rgba(0,0,0,0.08);
 }
 
 .section-title{
-font-size:22px;
-font-weight:bold;
-margin-bottom:18px;
+font-size:18px;
+font-weight:700;
+color:#333;
+margin-bottom:14px;
+display:flex;
+align-items:center;
+gap:8px;
 }
 
 .sheet{
-overflow:auto;
+overflow-x:auto;
+-webkit-overflow-scrolling:touch;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
+font-size:13px;
 }
 
 th{
-padding-bottom:14px;
+padding:10px 6px;
 text-align:center;
-color:#777;
+color:#999;
+font-weight:600;
+border-bottom:2px solid #F0E6F0;
+background:#FAFAFA;
 }
 
 td{
-padding:10px;
-border-top:1px solid #eee;
+padding:8px 4px;
+border-bottom:1px solid #F5E6F3;
 text-align:center;
-background:white;
 }
 
 .room{
-font-weight:bold;
+font-weight:700;
 text-align:left;
-min-width:140px;
-font-size:18px;
-color:#2f5233;
-background:#edf6ee;
+min-width:80px;
+font-size:14px;
+color:#D13B92;
+background:#F5E6F3;
 position:sticky;
 left:0;
 z-index:2;
+padding:8px 10px;
+border-radius:8px;
 }
 
 .slot{
-background:#f5f5f5;
-border-radius:14px;
-padding:10px;
+background:#F5E6F3;
+border-radius:10px;
+padding:8px 4px;
 cursor:pointer;
-min-width:160px;
-transition:0.2s;
+min-width:120px;
+transition:all 0.3s ease;
+border:2px solid transparent;
+font-size:12px;
 }
 
 .slot:hover{
-background:#ececec;
+background:#E8D4F8;
+border-color:#E84393;
 }
 
 .slot.active{
-background:#fff3bf;
-border:2px solid #ffe066;
+background:linear-gradient(135deg, #FFE8A8 0%, #FFD666 100%);
+border:2px solid #FFC107;
+box-shadow:0 2px 8px rgba(255, 193, 7, 0.3);
 }
 
 .green-slot{
-background:#b2f2bb !important;
-border:2px solid #69db7c !important;
+background:linear-gradient(135deg, #A8E6C1 0%, #7BDCA3 100%) !important;
+border:2px solid #52C77D !important;
+box-shadow:0 2px 8px rgba(82, 199, 125, 0.3) !important;
 }
 
 .slot-time{
-font-weight:bold;
-font-size:15px;
-color:#222;
+font-weight:700;
+font-size:12px;
+color:#D13B92;
 }
 
 .slot-guest{
-margin-top:8px;
-font-size:13px;
-color:#555;
+margin-top:4px;
+font-size:11px;
+color:#666;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
 }
 
 .timeline{
 display:flex;
 flex-direction:column;
-gap:12px;
-max-height:80vh;
-overflow:auto;
+gap:10px;
+max-height:70vh;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
 }
 
 .event{
-padding:18px;
-border-radius:20px;
+padding:14px;
+border-radius:14px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-gap:14px;
+align-items:flex-start;
+gap:10px;
+font-size:13px;
 }
 
-.normal{
-background:#f5f5f5;
+.event.normal{
+background:linear-gradient(135deg, #F5E6F3 0%, #F0E6F5 100%);
+border-left:4px solid #E8B4E0;
 }
 
-.yellow{
-background:#fff3bf;
-border:2px solid #ffe066;
+.event.yellow{
+background:linear-gradient(135deg, #FFF8E1 0%, #FFF3BF 100%);
+border-left:4px solid #FFD666;
+box-shadow:0 2px 8px rgba(255, 193, 7, 0.2);
 }
 
-.red{
-background:#ffc9c9;
-border:2px solid #ff8787;
+.event.red{
+background:linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
+border-left:4px solid #E84393;
+box-shadow:0 2px 8px rgba(232, 67, 147, 0.2);
 }
 
-.green{
-background:#b2f2bb;
-border:2px solid #69db7c;
+.event.green{
+background:linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+border-left:4px solid #52C77D;
+box-shadow:0 2px 8px rgba(82, 199, 125, 0.2);
+}
+
+.event-content{
+flex:1;
 }
 
 .time{
-font-size:22px;
-font-weight:bold;
-color:#222;
+font-size:16px;
+font-weight:700;
+color:#D13B92;
 }
 
 .event-title{
-font-size:20px;
-font-weight:bold;
-color:#222;
-margin-top:4px;
-}
-
-.sub{
-font-size:14px;
+font-size:15px;
+font-weight:700;
 color:#333;
 margin-top:4px;
 }
 
+.sub{
+font-size:12px;
+color:#666;
+margin-top:4px;
+}
+
+.event-buttons{
+display:flex;
+gap:8px;
+}
+
 button{
 border:none;
-padding:12px 16px;
-border-radius:14px;
-background:#2b8a3e;
+padding:8px 12px;
+border-radius:10px;
+background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
 color:white;
-font-weight:bold;
+font-weight:600;
 cursor:pointer;
-margin-top:10px;
+transition:all 0.3s ease;
+font-size:12px;
+white-space:nowrap;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 4px 12px rgba(209, 59, 146, 0.3);
+}
+
+button:active{
+transform:translateY(0);
 }
 
 .popup{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,0.5);
+background:rgba(0,0,0,0.4);
 display:none;
 justify-content:center;
 align-items:center;
-padding:20px;
+padding:16px;
 z-index:999;
+-webkit-overflow-scrolling:touch;
 }
 
 .popup-box{
 background:white;
-color:black;
+color:#333;
 width:100%;
-max-width:420px;
-border-radius:24px;
+max-width:400px;
+border-radius:20px;
 padding:20px;
+box-shadow:0 10px 40px rgba(0,0,0,0.2);
+animation:slideUp 0.3s ease;
+max-height:90vh;
+overflow-y:auto;
+}
+
+@keyframes slideUp{
+from{
+  transform:translateY(20px);
+  opacity:0;
+}
+to{
+  transform:translateY(0);
+  opacity:1;
+}
+}
+
+.popup-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:16px;
 }
 
 .popup-title{
-font-size:22px;
-font-weight:bold;
-margin-bottom:14px;
+font-size:18px;
+font-weight:700;
+color:#D13B92;
+}
+
+.btn-close{
+background:#E8B4E0 !important;
+color:#333 !important;
+padding:6px 10px !important;
+margin:0 !important;
+font-size:16px;
+}
+
+.btn-close:hover{
+background:#D4A0D0 !important;
 }
 
 input,textarea{
 width:100%;
-padding:14px;
-border-radius:14px;
-border:1px solid #ddd;
+padding:12px;
+border-radius:12px;
+border:2px solid #E8B4E0;
 margin-bottom:12px;
-font-size:15px;
+font-size:14px;
+font-family:inherit;
+transition:all 0.3s ease;
 }
 
-.btn-close{
-background:#999;
-float:right;
-padding:6px 12px;
+input:focus,textarea:focus{
+outline:none;
+border-color:#D13B92;
+box-shadow:0 0 0 3px rgba(209, 59, 146, 0.1);
+background:#FFFBFE;
 }
 
 .btn-delete{
-background:#d32f2f;
-margin-top:0;
+background:#FF6B6B !important;
+width:100%;
+}
+
+.btn-delete:hover{
+background:#FF5252 !important;
+}
+
+.btn-save{
+background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+width:100%;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+gap:12px;
+margin-top:14px;
+padding-top:14px;
+border-top:2px solid #F5E6F3;
+}
+
+.stat-item{
+background:linear-gradient(135deg, #F5E6F3 0%, #F0E6F5 100%);
+padding:12px;
+border-radius:12px;
+text-align:center;
+}
+
+.stat-label{
+font-size:12px;
+color:#999;
+font-weight:600;
+}
+
+.stat-value{
+font-size:20px;
+font-weight:700;
+color:#D13B92;
+margin-top:4px;
+}
+
+.export-btn{
+background:linear-gradient(135deg, #52C77D 0%, #389E0D 100%);
+width:100%;
+margin-top:12px !important;
+}
+
+.export-btn:hover{
+transform:translateY(-2px);
+box-shadow:0 4px 12px rgba(82, 199, 125, 0.3);
+}
+
+@media(max-width:480px){
+.title{
+font-size:24px;
+}
+
+table{
+font-size:11px;
+}
+
+.slot{
+min-width:100px;
+padding:6px 2px;
+}
+
+.event{
+padding:10px;
+font-size:12px;
+}
+
+.time{
+font-size:14px;
+}
+
+button{
+font-size:11px;
+padding:6px 10px;
+}
 }
 
 </style>
@@ -284,16 +505,43 @@ margin-top:0;
 
 <body>
 
-<div class="title">
-🍄 Nấm Homestay
+<div class="header">
+<div class="logo-container">
+<svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Vòng ngoài -->
+  <circle cx="100" cy="100" r="95" fill="#8B1538" opacity="0.95"/>
+  
+  <!-- Cái nấm -->
+  <ellipse cx="100" cy="75" rx="55" ry="48" fill="#FF69B4"/>
+  
+  <!-- Chấm trên nấm -->
+  <ellipse cx="75" cy="55" rx="12" ry="15" fill="#8B1538"/>
+  <ellipse cx="100" cy="45" rx="10" ry="14" fill="#8B1538"/>
+  <ellipse cx="125" cy="55" rx="12" ry="15" fill="#8B1538"/>
+  <ellipse cx="85" cy="70" rx="9" ry="12" fill="#8B1538"/>
+  <ellipse cx="115" cy="70" rx="9" ry="12" fill="#8B1538"/>
+  
+  <!-- Mỏ nấm -->
+  <path d="M 65 85 Q 65 110 100 120 Q 135 110 135 85" fill="#FF69B4"/>
+  <path d="M 70 90 L 72 115" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 80 90 L 82 118" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 90 92 L 92 120" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 100 93 L 100 122" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 110 92 L 108 120" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 120 90 L 118 118" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 130 90 L 128 115" stroke="#8B1538" stroke-width="2" fill="none"/>
+  
+  <!-- Cuống nấm -->
+  <rect x="85" y="115" width="30" height="50" fill="#FF69B4" rx="5"/>
+</svg>
+
+<div>
+  <h1 class="title">Nấm Homestay</h1>
+  <p class="subtitle">Operation Dashboard</p>
+</div>
 </div>
 
-<div class="subtitle">
-Operation Dashboard
-</div>
-
-<div class="month" id="monthTitle">
-May 2025
+<div class="month-selector" id="monthSelector"></div>
 </div>
 
 <div class="calendar" id="calendar"></div>
@@ -307,9 +555,7 @@ May 2025
 </div>
 
 <div class="sheet">
-
 <table>
-
 <tr>
 <th>Room</th>
 <th>Ca 1</th>
@@ -317,12 +563,12 @@ May 2025
 <th>Ca 3</th>
 <th>Đêm</th>
 </tr>
-
 <tbody id="bookingTable"></tbody>
-
 </table>
-
 </div>
+
+<div class="stats" id="stats"></div>
+<button class="export-btn" onclick="exportToExcel()">📊 Xuất Excel</button>
 
 </div>
 
@@ -339,85 +585,63 @@ May 2025
 </div>
 
 <div class="popup" id="popup">
-
 <div class="popup-box">
 
-<button class="btn-close" onclick="closePopup()">✕</button>
-
-<div class="popup-title" id="popupTitle">
-Booking
+<div class="popup-header">
+  <div class="popup-title" id="popupTitle">Booking</div>
+  <button class="btn-close" onclick="closePopup()">✕</button>
 </div>
 
 <input id="guestName" placeholder="Tên khách"/>
+<textarea id="guestNote" placeholder="Ghi chú" rows="3"></textarea>
 
-<textarea id="guestNote"
-placeholder="Ghi chú"></textarea>
+<button class="btn-save" onclick="saveBooking()">Lưu booking</button>
 
-<button onclick="saveBooking()">
-Lưu booking
-</button>
-
-<button class="btn-delete" onclick="deleteBooking()">
-Xóa booking
-</button>
+<button class="btn-delete" onclick="deleteBooking()" style="display:none;">Xóa booking</button>
 
 </div>
-
 </div>
 
 <script>
 
 const rooms={
-
 Midori:[
 ["10:00","13:00"],
 ["13:30","16:30"],
 ["17:00","20:00"],
 ["20:30","09:30"]
 ],
-
 Truffle:[
 ["10:30","13:30"],
 ["14:00","17:00"],
 ["17:30","20:30"],
 ["21:00","10:00"]
 ],
-
 Matutake:[
 ["11:00","14:00"],
 ["14:30","17:30"],
 ["18:00","21:00"],
 ["21:30","10:30"]
 ],
-
 Porcini:[
 ["11:30","14:30"],
 ["15:00","18:00"],
 ["18:30","21:30"],
 ["22:00","11:00"]
 ],
-
 Shitake:[
 ["12:00","15:00"],
 ["15:30","18:30"],
 ["19:00","22:00"],
 ["22:30","11:30"]
 ]
-
 };
 
 let bookings={};
-
 let currentSlot=null;
-
-const calendar=
-document.getElementById('calendar');
-
-const monthTitle=
-document.getElementById('monthTitle');
+let selectedDate=new Date();
 
 const months=[
-
 { name:'May', month:5, days:31 },
 { name:'June', month:6, days:30 },
 { name:'July', month:7, days:31 },
@@ -426,16 +650,19 @@ const months=[
 { name:'October', month:10, days:31 },
 { name:'November', month:11, days:30 },
 { name:'December', month:12, days:31 }
-
 ];
 
-let currentMonth=5;
+let currentMonth=new Date().getMonth()+1;
 
-// Load dữ liệu từ localStorage khi trang tải
+// Load dữ liệu từ localStorage
 function loadData(){
   const saved=localStorage.getItem('bookings');
   if(saved){
-    bookings=JSON.parse(saved);
+    try{
+      bookings=JSON.parse(saved);
+    }catch(e){
+      console.error('Error loading data:', e);
+    }
   }
 }
 
@@ -446,397 +673,277 @@ function saveData(){
 
 // Khởi tạo
 loadData();
+renderMonthSelector();
 renderCalendar(currentMonth);
-renderTimeline();
 renderBookingSheet();
+renderTimeline();
+updateStats();
 
-function renderCalendar(month){
-
-calendar.innerHTML='';
-
-const selected=
-months.find(m=>m.month===month);
-
-monthTitle.innerHTML=
-`${selected.name} 2025`;
-
-// Hiển thị các nút tháng
-months.forEach(m=>{
-
-calendar.innerHTML+=`
-
-<div class="day month-btn"
-
-onclick="changeMonth(${m.month})">
-
-${m.name.substring(0,3)}
-
-</div>
-
-`;
-
-});
-
-// Hiển thị các ngày trong tháng theo thứ tự
-for(let i=1;i<=selected.days;i++){
-
-calendar.innerHTML+=`
-
-<div class="day date-btn
-${i===1?'active-date':''}"
-
-onclick="selectDate(this)">
-
-${i}
-
-</div>
-
-`;
-
-}
-
+function renderMonthSelector(){
+  const selector=document.getElementById('monthSelector');
+  selector.innerHTML='';
+  
+  months.forEach(m=>{
+    const btn=document.createElement('button');
+    btn.className='month-btn' + (m.month===currentMonth ? ' active' : '');
+    btn.textContent=m.name;
+    btn.onclick=()=>changeMonth(m.month);
+    selector.appendChild(btn);
+  });
 }
 
 function changeMonth(month){
-
-currentMonth=month;
-
-renderCalendar(month);
-
+  currentMonth=month;
+  renderMonthSelector();
+  renderCalendar(month);
 }
 
-function selectDate(el){
-
-document.querySelectorAll('.date-btn')
-.forEach(d=>d.classList.remove('active-date'));
-
-el.classList.add('active-date');
-
+function renderCalendar(month){
+  const calendar=document.getElementById('calendar');
+  calendar.innerHTML='';
+  
+  const selected=months.find(m=>m.month===month);
+  
+  const today=new Date();
+  const isCurrentMonth=today.getMonth()+1===month;
+  const todayDate=today.getDate();
+  
+  for(let i=1;i<=selected.days;i++){
+    const dayEl=document.createElement('div');
+    dayEl.className='day' + (isCurrentMonth && i===todayDate ? ' active-date' : '');
+    dayEl.textContent=i;
+    dayEl.onclick=()=>selectDate(i, month, dayEl);
+    calendar.appendChild(dayEl);
+  }
 }
 
-const bookingTable=
-document.getElementById('bookingTable');
+function selectDate(day, month, el){
+  document.querySelectorAll('.day').forEach(d=>d.classList.remove('active-date'));
+  el.classList.add('active-date');
+  selectedDate=new Date(2025, month-1, day);
+  renderBookingSheet();
+}
+
+function getDateKey(date=selectedDate){
+  const year=date.getFullYear();
+  const month=String(date.getMonth()+1).padStart(2,'0');
+  const day=String(date.getDate()).padStart(2,'0');
+  return `${year}-${month}-${day}`;
+}
+
+const bookingTable=document.getElementById('bookingTable');
 
 Object.entries(rooms).forEach(([room,times])=>{
-
-bookingTable.innerHTML+=`
-
-<tr>
-
-<td class="room">
-${room}
-</td>
-
-${times.map((time,index)=>`
-
-<td>
-
-<div class="slot"
-id="${room}-${index}"
-onclick="openPopup('${room}',${index})">
-
-<div class="slot-time">
-${time[0]} - ${time[1]}
-</div>
-
-<div class="slot-guest"
-id="${room}-${index}-guest">
-Trống
-</div>
-
-</div>
-
-</td>
-
-`).join('')}
-
-</tr>
-
-`;
-
+  const row=document.createElement('tr');
+  
+  let html=`<td class="room">${room}</td>`;
+  
+  times.forEach((time,index)=>{
+    html+=`
+    <td>
+      <div class="slot" id="${room}-${index}" onclick="openPopup('${room}',${index})">
+        <div class="slot-time">${time[0]} - ${time[1]}</div>
+        <div class="slot-guest" id="${room}-${index}-guest">Trống</div>
+      </div>
+    </td>
+    `;
+  });
+  
+  row.innerHTML=html;
+  bookingTable.appendChild(row);
 });
 
-// Render lại booking sheet sau khi load
-renderBookingSheet();
-
 function timeToMinutes(time){
-
-let h=parseInt(time.split(':')[0]);
-let m=parseInt(time.split(':')[1]);
-
-return h*60+m;
-
+  let h=parseInt(time.split(':')[0]);
+  let m=parseInt(time.split(':')[1]);
+  return h*60+m;
 }
 
 function renderTimeline(){
-
-const timeline=
-document.getElementById('timeline');
-
-timeline.innerHTML='';
-
-const now=new Date();
-
-const currentMinutes=
-now.getHours()*60+now.getMinutes();
-
-let items=[];
-
-Object.entries(rooms).forEach(([room,times])=>{
-
-times.forEach((time,index)=>{
-
-const inTime=time[0];
-const outTime=time[1];
-
-const inMinutes=
-timeToMinutes(inTime);
-
-const outMinutes=
-timeToMinutes(outTime);
-
-const booking=
-bookings[`${room}-${index}`];
-
-let status='normal';
-let priority=4;
-
-if(booking){
-
-status='yellow';
-priority=2;
-
-}
-
-if(
-booking &&
-currentMinutes>=outMinutes &&
-currentMinutes<inMinutes
-){
-
-status='red';
-priority=1;
-
-}
-
-if(
-booking &&
-booking.cleaned &&
-currentMinutes<inMinutes
-){
-
-status='green';
-priority=3;
-
-}
-
-if(
-booking &&
-booking.checkedIn
-){
-
-status='green';
-priority=3;
-
-}
-
-items.push({
-
-room,
-index,
-inTime,
-outTime,
-booking,
-status,
-priority,
-sortTime:outMinutes
-
-});
-
-});
-
-});
-
-items.sort((a,b)=>{
-
-if(a.priority!==b.priority){
-
-return a.priority-b.priority;
-
-}
-
-return a.sortTime-b.sortTime;
-
-});
-
-items.forEach(item=>{
-
-timeline.innerHTML+=`
-
-<div class="event ${item.status}">
-
-<div>
-
-<div class="time">
-${item.inTime} - ${item.outTime}
-</div>
-
-<div class="event-title">
-${item.room}
-</div>
-
-${item.booking
-?`
-<div class="sub">
-👤 ${item.booking.name}
-</div>
-`
-:''
-}
-
-${item.status==='yellow'
-?`
-<div class="sub">
-🟡 Có booking
-</div>
-`
-:''
-}
-
-${item.status==='red'
-?`
-<div class="sub">
-🔴 CẦN DỌN
-</div>
-`
-:''
-}
-
-${item.status==='green'
-?`
-<div class="sub">
-🟢 READY / ĐÃ IN
-</div>
-`
-:''
-}
-
-</div>
-
-<div>
-
-${item.status==='yellow'
-?`
-<button
-onclick="guestCheckedIn('${item.room}',${item.index})">
-Đã in
-</button>
-`
-:''
-}
-
-${item.status==='red'
-?`
-<button
-onclick="doneCleaning('${item.room}',${item.index})">
-Đã dọn xong
-</button>
-`
-:''
-}
-
-</div>
-
-</div>
-
-`;
-
-});
-
+  const timeline=document.getElementById('timeline');
+  timeline.innerHTML='';
+  
+  const now=new Date();
+  const currentMinutes=now.getHours()*60+now.getMinutes();
+  
+  let items=[];
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const inTime=time[0];
+      const outTime=time[1];
+      
+      const inMinutes=timeToMinutes(inTime);
+      const outMinutes=timeToMinutes(outTime);
+      
+      const dateKey=getDateKey();
+      const bookingKey=`${dateKey}-${room}-${index}`;
+      const booking=bookings[bookingKey];
+      
+      let status='normal';
+      let priority=4;
+      
+      if(booking){
+        status='yellow';
+        priority=2;
+      }
+      
+      if(booking && currentMinutes>=outMinutes && currentMinutes<inMinutes){
+        status='red';
+        priority=1;
+      }
+      
+      if(booking && booking.cleaned && currentMinutes<inMinutes){
+        status='green';
+        priority=3;
+      }
+      
+      if(booking && booking.checkedIn){
+        status='green';
+        priority=3;
+      }
+      
+      items.push({
+        room, index, inTime, outTime, booking, status, priority, sortTime:outMinutes, bookingKey
+      });
+    });
+  });
+  
+  items.sort((a,b)=>{
+    if(a.priority!==b.priority) return a.priority-b.priority;
+    return a.sortTime-b.sortTime;
+  });
+  
+  items.forEach(item=>{
+    const eventDiv=document.createElement('div');
+    eventDiv.className=`event ${item.status}`;
+    
+    let html=`
+    <div class="event-content">
+      <div class="time">${item.inTime} - ${item.outTime}</div>
+      <div class="event-title">${item.room}</div>
+      ${item.booking ? `<div class="sub">👤 ${item.booking.name}</div>` : ''}
+      ${item.status==='yellow' ? `<div class="sub">🟡 Có booking</div>` : ''}
+      ${item.status==='red' ? `<div class="sub">🔴 CẦN DỌN</div>` : ''}
+      ${item.status==='green' ? `<div class="sub">🟢 READY / ĐÃ IN</div>` : ''}
+    </div>
+    <div class="event-buttons">
+      ${item.status==='yellow' ? `<button onclick="guestCheckedIn('${item.room}',${item.index})">Đã in</button>` : ''}
+      ${item.status==='red' ? `<button onclick="doneCleaning('${item.room}',${item.index})">Đã dọn xong</button>` : ''}
+    </div>
+    `;
+    
+    eventDiv.innerHTML=html;
+    timeline.appendChild(eventDiv);
+  });
 }
 
 function renderBookingSheet(){
-
-Object.entries(bookings).forEach(([key,data])=>{
-
-const slot=
-document.getElementById(key);
-
-if(slot){
-  slot.classList.remove(
-  'active',
-  'green-slot'
-  );
-
-  if(data.checkedIn){
-
-  slot.classList.add('green-slot');
-
-  }
-  else{
-
-  slot.classList.add('active');
-
-  }
-
-  document.getElementById(`${key}-guest`).innerHTML=data.name;
+  const dateKey=getDateKey();
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const slot=document.getElementById(`${room}-${index}`);
+      const guestEl=document.getElementById(`${room}-${index}-guest`);
+      
+      if(slot){
+        slot.classList.remove('active', 'green-slot');
+        
+        const bookingKey=`${dateKey}-${room}-${index}`;
+        const booking=bookings[bookingKey];
+        
+        if(booking){
+          if(booking.checkedIn){
+            slot.classList.add('green-slot');
+          }else{
+            slot.classList.add('active');
+          }
+          guestEl.textContent=booking.name;
+        }else{
+          guestEl.textContent='Trống';
+        }
+      }
+    });
+  });
 }
 
-});
-
+function updateStats(){
+  const dateKey=getDateKey();
+  const stats=document.getElementById('stats');
+  
+  let booked=0;
+  let checked=0;
+  let empty=0;
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const bookingKey=`${dateKey}-${room}-${index}`;
+      const booking=bookings[bookingKey];
+      
+      if(booking){
+        booked++;
+        if(booking.checkedIn) checked++;
+      }else{
+        empty++;
+      }
+    });
+  });
+  
+  stats.innerHTML=`
+  <div class="stat-item">
+    <div class="stat-label">Đã book</div>
+    <div class="stat-value">${booked}</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-label">Đã check-in</div>
+    <div class="stat-value">${checked}</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-label">Còn trống</div>
+    <div class="stat-value">${empty}</div>
+  </div>
+  `;
 }
 
 function doneCleaning(room,index){
-
-const key=`${room}-${index}`;
-
-if(bookings[key]){
-  bookings[key].cleaned=true;
-  saveData();
-  renderTimeline();
-  renderBookingSheet();
-}
-
+  const bookingKey=`${getDateKey()}-${room}-${index}`;
+  if(bookings[bookingKey]){
+    bookings[bookingKey].cleaned=true;
+    saveData();
+    renderTimeline();
+  }
 }
 
 function guestCheckedIn(room,index){
-
-const key=`${room}-${index}`;
-
-if(bookings[key]){
-  bookings[key].checkedIn=true;
-  saveData();
-  renderTimeline();
-  renderBookingSheet();
-}
-
+  const bookingKey=`${getDateKey()}-${room}-${index}`;
+  if(bookings[bookingKey]){
+    bookings[bookingKey].checkedIn=true;
+    saveData();
+    renderTimeline();
+    renderBookingSheet();
+    updateStats();
+  }
 }
 
 function openPopup(room,index){
-
-currentSlot={room,index};
-
-const key=`${room}-${index}`;
-const booking=bookings[key];
-
-document.getElementById('popup')
-.style.display='flex';
-
-document.getElementById('popupTitle')
-.innerHTML=
-`${room} - Ca ${index+1}`;
-
-// Nếu có booking rồi, load dữ liệu cũ
-if(booking){
-  document.getElementById('guestName').value=booking.name;
-  document.getElementById('guestNote').value=booking.note||'';
-  document.querySelector('.btn-delete').style.display='block';
-}else{
-  document.getElementById('guestName').value='';
-  document.getElementById('guestNote').value='';
-  document.querySelector('.btn-delete').style.display='none';
-}
-
+  currentSlot={room,index};
+  
+  const dateKey=getDateKey();
+  const bookingKey=`${dateKey}-${room}-${index}`;
+  const booking=bookings[bookingKey];
+  
+  document.getElementById('popup').style.display='flex';
+  document.getElementById('popupTitle').innerHTML=`${room} - Ca ${index+1}`;
+  
+  if(booking){
+    document.getElementById('guestName').value=booking.name;
+    document.getElementById('guestNote').value=booking.note||'';
+    document.querySelector('.btn-delete').style.display='block';
+  }else{
+    document.getElementById('guestName').value='';
+    document.getElementById('guestNote').value='';
+    document.querySelector('.btn-delete').style.display='none';
+  }
 }
 
 function closePopup(){
@@ -844,53 +951,83 @@ function closePopup(){
 }
 
 function saveBooking(){
-
-const name=
-document.getElementById('guestName').value;
-
-const note=
-document.getElementById('guestNote').value;
-
-if(!name.trim()){
-  alert('Vui lòng nhập tên khách');
-  return;
-}
-
-bookings[
-`${currentSlot.room}-${currentSlot.index}`
-]={
-name,
-note,
-checkedIn:false,
-cleaned:false
-};
-
-saveData();
-
-document.getElementById('popup')
-.style.display='none';
-
-document.getElementById('guestName').value='';
-document.getElementById('guestNote').value='';
-
-renderTimeline();
-renderBookingSheet();
-
+  const name=document.getElementById('guestName').value;
+  const note=document.getElementById('guestNote').value;
+  
+  if(!name.trim()){
+    alert('Vui lòng nhập tên khách');
+    return;
+  }
+  
+  const dateKey=getDateKey();
+  const bookingKey=`${dateKey}-${currentSlot.room}-${currentSlot.index}`;
+  
+  bookings[bookingKey]={
+    name,
+    note,
+    checkedIn:false,
+    cleaned:false,
+    createdAt:new Date().toISOString()
+  };
+  
+  saveData();
+  closePopup();
+  renderTimeline();
+  renderBookingSheet();
+  updateStats();
 }
 
 function deleteBooking(){
   if(confirm('Bạn chắc chắn muốn xóa booking này?')){
-    delete bookings[`${currentSlot.room}-${currentSlot.index}`];
+    const dateKey=getDateKey();
+    const bookingKey=`${dateKey}-${currentSlot.room}-${currentSlot.index}`;
+    delete bookings[bookingKey];
     saveData();
     closePopup();
     renderTimeline();
     renderBookingSheet();
+    updateStats();
   }
 }
 
-renderTimeline();
+function exportToExcel(){
+  const dateKey=getDateKey();
+  const date=new Date(selectedDate);
+  const dateStr=date.toLocaleDateString('vi-VN');
+  
+  let csvContent='Nấm Homestay - Báo cáo booking\n';
+  csvContent+=`Ngày: ${dateStr}\n\n`;
+  
+  csvContent+='Phòng,Ca,Giờ,Tên khách,Ghi chú,Trạng thái\n';
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const bookingKey=`${dateKey}-${room}-${index}`;
+      const booking=bookings[bookingKey];
+      
+      const caNum=index+1;
+      const status=booking ? (booking.checkedIn ? 'Checked-in' : 'Booked') : 'Trống';
+      const guestName=booking ? booking.name : '-';
+      const guestNote=booking ? (booking.note || '-') : '-';
+      
+      csvContent+=`${room},Ca ${caNum},${time[0]}-${time[1]},${guestName},"${guestNote}",${status}\n`;
+    });
+  });
+  
+  const blob=new Blob(['\ufeff'+csvContent], {type:'text/csv;charset=utf-8;'});
+  const link=document.createElement('a');
+  const url=URL.createObjectURL(blob);
+  
+  link.setAttribute('href', url);
+  link.setAttribute('download', `NAM_HOMESTAY_${dateKey}.csv`);
+  link.style.visibility='hidden';
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
-setInterval(renderTimeline,60000);
+setInterval(renderTimeline, 60000);
 
 </script>
 
