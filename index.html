@@ -1,4 +1,4 @@
-```html
+```html id="o0t80m"
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -22,24 +22,21 @@ padding:16px;
 color:white;
 }
 
-.header{
-margin-bottom:20px;
-}
-
 .title{
 font-size:32px;
 font-weight:bold;
+margin-bottom:6px;
 }
 
 .subtitle{
+margin-bottom:20px;
 opacity:0.9;
-margin-top:6px;
 }
 
 .month{
 font-size:22px;
 font-weight:bold;
-margin-bottom:12px;
+margin-bottom:14px;
 }
 
 .calendar{
@@ -56,8 +53,8 @@ padding:14px;
 border-radius:18px;
 background:rgba(255,255,255,0.2);
 text-align:center;
-cursor:pointer;
 font-weight:bold;
+cursor:pointer;
 }
 
 .day.active{
@@ -110,13 +107,19 @@ td{
 padding:10px;
 border-top:1px solid #eee;
 text-align:center;
+background:white;
 }
 
 .room{
 font-weight:bold;
 text-align:left;
-min-width:120px;
-font-size:16px;
+min-width:140px;
+font-size:18px;
+color:#2f5233;
+background:#edf6ee;
+position:sticky;
+left:0;
+z-index:2;
 }
 
 .slot{
@@ -125,6 +128,12 @@ border-radius:14px;
 padding:10px;
 cursor:pointer;
 min-width:150px;
+transition:0.2s;
+}
+
+.slot.active{
+background:#d8f5d8;
+border:2px solid #69b96d;
 }
 
 .slot:hover{
@@ -134,7 +143,6 @@ background:#ececec;
 .slot-time{
 font-weight:bold;
 font-size:15px;
-color:#222;
 }
 
 .slot-guest{
@@ -158,7 +166,6 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:14px;
-transition:0.2s;
 }
 
 .normal{
@@ -173,12 +180,6 @@ background:#ffc9c9;
 background:#b2f2bb;
 }
 
-.left{
-display:flex;
-flex-direction:column;
-gap:6px;
-}
-
 .time{
 font-size:22px;
 font-weight:bold;
@@ -189,12 +190,13 @@ color:#222;
 font-size:20px;
 font-weight:bold;
 color:#222;
+margin-top:4px;
 }
 
 .sub{
 font-size:14px;
-font-weight:500;
 color:#333;
+margin-top:4px;
 }
 
 button{
@@ -205,6 +207,7 @@ background:#2b8a3e;
 color:white;
 font-weight:bold;
 cursor:pointer;
+margin-top:10px;
 }
 
 .popup{
@@ -242,16 +245,10 @@ margin-bottom:12px;
 font-size:15px;
 }
 
-.save-btn{
-width:100%;
-}
-
 </style>
 </head>
 
 <body>
-
-<div class="header">
 
 <div class="title">
 🍄 Nấm Homestay
@@ -259,8 +256,6 @@ width:100%;
 
 <div class="subtitle">
 Operation Dashboard
-</div>
-
 </div>
 
 <div class="month">
@@ -317,14 +312,13 @@ May / June 2025
 Booking
 </div>
 
-<input id="guestInput" placeholder="Tên khách"/>
+<input id="guestName" placeholder="Tên khách"/>
 
-<textarea id="noteInput"
+<textarea id="guestNote"
 placeholder="Ghi chú"></textarea>
 
-<button class="save-btn"
-onclick="closePopup()">
-Lưu
+<button onclick="saveBooking()">
+Lưu booking
 </button>
 
 </div>
@@ -336,43 +330,45 @@ Lưu
 const rooms = {
 
 Midori:[
-"10:00 - 13:00",
-"13:30 - 16:30",
-"17:00 - 20:00",
-"20:30 - 09:30"
+["10:00","13:00"],
+["13:30","16:30"],
+["17:00","20:00"],
+["20:30","09:30"]
 ],
 
 Truffle:[
-"10:30 - 13:30",
-"14:00 - 17:00",
-"17:30 - 20:30",
-"21:00 - 10:00"
+["10:30","13:30"],
+["14:00","17:00"],
+["17:30","20:30"],
+["21:00","10:00"]
 ],
 
 Matutake:[
-"11:00 - 14:00",
-"14:30 - 17:30",
-"18:00 - 21:00",
-"21:30 - 10:30"
+["11:00","14:00"],
+["14:30","17:30"],
+["18:00","21:00"],
+["21:30","10:30"]
 ],
 
 Porcini:[
-"11:30 - 14:30",
-"15:00 - 18:00",
-"18:30 - 21:30",
-"22:00 - 11:00"
+["11:30","14:30"],
+["15:00","18:00"],
+["18:30","21:30"],
+["22:00","11:00"]
 ],
 
 Shitake:[
-"12:00 - 15:00",
-"15:30 - 18:30",
-"19:00 - 22:00",
-"22:30 - 11:30"
+["12:00","15:00"],
+["15:30","18:30"],
+["19:00","22:00"],
+["22:30","11:30"]
 ]
 
 };
 
-const calendar=document.getElementById('calendar');
+let currentSlot=null;
+
+const bookings={};
 
 for(let i=28;i<=31;i++){
 
@@ -412,13 +408,15 @@ ${times.map((time,index)=>`
 <td>
 
 <div class="slot"
-onclick="openPopup('${room} - Ca ${index+1}')">
+id="${room}-${index}"
+onclick="openPopup('${room}',${index})">
 
 <div class="slot-time">
-${time}
+${time[0]} - ${time[1]}
 </div>
 
-<div class="slot-guest">
+<div class="slot-guest"
+id="${room}-${index}-guest">
 Trống
 </div>
 
@@ -434,54 +432,145 @@ Trống
 
 });
 
-const timeline=document.getElementById('timeline');
+function renderTimeline(){
 
-const timelineData=[
+const timeline=
+document.getElementById('timeline');
 
-["Midori","13:00","14:00"],
-["Truffle","13:30","14:30"],
-["Matutake","14:00","15:00"],
-["Porcini","14:30","15:30"],
-["Shitake","15:00","16:00"],
+timeline.innerHTML='';
 
-["Midori","16:30","17:00"],
-["Truffle","17:00","17:30"],
-["Matutake","17:30","18:00"],
-["Porcini","18:00","18:30"],
-["Shitake","18:30","19:00"]
+const now=new Date();
 
-];
+const currentMinutes=
+now.getHours()*60+now.getMinutes();
 
-timelineData.forEach((item,index)=>{
+let items=[];
+
+Object.entries(rooms).forEach(([room,times])=>{
+
+times.forEach((time,index)=>{
+
+const out=time[1];
+
+let outHour=parseInt(out.split(':')[0]);
+let outMinute=parseInt(out.split(':')[1]);
+
+const outMinutes=
+outHour*60+outMinute;
+
+items.push({
+
+room,
+index,
+out,
+next:index<3
+?times[index+1][0]
+:'-',
+
+status:
+currentMinutes>=outMinutes
+&& currentMinutes<outMinutes+60
+?'red'
+:'normal'
+
+});
+
+});
+
+});
+
+items.sort((a,b)=>{
+
+const aTime=
+parseInt(a.out.split(':')[0])*60+
+parseInt(a.out.split(':')[1]);
+
+const bTime=
+parseInt(b.out.split(':')[0])*60+
+parseInt(b.out.split(':')[1]);
+
+return aTime-bTime;
+
+});
+
+items.forEach((item,i)=>{
+
+const booking=
+bookings[`${item.room}-${item.index}`];
 
 timeline.innerHTML+=`
 
-<div class="event normal"
-id="event${index}">
+<div class="event ${item.status}"
+id="event-${item.room}-${item.index}">
 
-<div class="left">
+<div>
 
 <div class="time">
-OUT ${item[1]}
+OUT ${item.out}
 </div>
 
 <div class="event-title">
-${item[0]}
+${item.room}
 </div>
 
 <div class="sub">
-IN KHUNG SAU: ${item[2]}
+IN KHUNG SAU: ${item.next}
 </div>
+
+${booking
+?`<div class="sub">
+👤 ${booking.name}
+</div>`
+:''
+}
+
+${booking
+?`<div class="sub">
+🚨 Có khách khung sau
+</div>`
+:''
+}
 
 </div>
 
-<div id="btn${index}"></div>
+<div id="btn-${item.room}-${item.index}">
+
+${item.status==='red'
+?`<button
+onclick="doneCleaning('${item.room}',${item.index})">
+Đã dọn xong
+</button>`
+:''
+}
+
+</div>
 
 </div>
 
 `;
 
 });
+
+}
+
+function doneCleaning(room,index){
+
+const item=
+document.getElementById(
+`event-${room}-${index}`
+);
+
+item.classList.remove('red');
+
+item.classList.add('green');
+
+item.querySelector('.event-title')
+.innerHTML+=` ✅ READY`;
+
+item.querySelector('button')
+.remove();
+
+}
 
 function selectDay(el){
 
@@ -492,63 +581,52 @@ el.classList.add('active');
 
 }
 
-function openPopup(title){
+function openPopup(room,index){
+
+currentSlot={room,index};
 
 document.getElementById('popup')
 .style.display='flex';
 
 document.getElementById('popupTitle')
-.innerHTML=title;
+.innerHTML=
+`${room} - Ca ${index+1}`;
 
 }
 
-function closePopup(){
+function saveBooking(){
+
+const name=
+document.getElementById('guestName').value;
+
+const note=
+document.getElementById('guestNote').value;
+
+bookings[
+`${currentSlot.room}-${currentSlot.index}`
+]={
+name,
+note
+};
+
+document.getElementById(
+`${currentSlot.room}-${currentSlot.index}`
+).classList.add('active');
+
+document.getElementById(
+`${currentSlot.room}-${currentSlot.index}-guest`
+).innerHTML=name;
 
 document.getElementById('popup')
 .style.display='none';
 
-}
-
-function triggerCleaning(index){
-
-const item=
-document.getElementById(`event${index}`);
-
-const btn=
-document.getElementById(`btn${index}`);
-
-item.classList.remove('normal');
-
-item.classList.add('red');
-
-btn.innerHTML=
-`<button onclick="doneCleaning(${index})">
-Đã dọn xong
-</button>`;
+renderTimeline();
 
 }
 
-function doneCleaning(index){
+renderTimeline();
 
-const item=
-document.getElementById(`event${index}`);
-
-const btn=
-document.getElementById(`btn${index}`);
-
-item.classList.remove('red');
-
-item.classList.add('green');
-
-item.querySelector('.event-title')
-.innerHTML+=' ✅ READY';
-
-btn.innerHTML='';
-
-}
-
-setTimeout(()=>triggerCleaning(0),2000);
-setTimeout(()=>triggerCleaning(1),6000);
+setInterval(renderTimeline,60000);
 
 </script>
 
