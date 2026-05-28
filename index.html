@@ -254,25 +254,18 @@ justify-content:space-between;
 align-items:flex-start;
 gap:10px;
 font-size:13px;
-border-left:4px solid transparent;
 }
 
 .event.yellow{
 background:linear-gradient(135deg, #FFF9C4 0%, #FFEE58 100%);
-border-left-color:#FDD835;
+border-left:4px solid #FDD835;
 box-shadow:0 2px 8px rgba(253, 216, 53, 0.2);
 }
 
 .event.red{
 background:linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
-border-left-color:#E57373;
+border-left:4px solid #E57373;
 box-shadow:0 2px 8px rgba(229, 115, 115, 0.2);
-}
-
-.event.green{
-background:linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
-border-left-color:#66BB6A;
-box-shadow:0 2px 8px rgba(102, 187, 106, 0.2);
 }
 
 .event-content{
@@ -776,23 +769,17 @@ function renderTimeline(){
       const booking=bookings[bookingKey];
       const isCleaned=cleanedSlots[bookingKey];
       
-      // Hiển thị TẤT CẢ các khung giờ có booking
+      // Hiển thị booking khi:
+      // 1. Có booking và chưa tới giờ checkout -> vàng (chờ checkout)
+      // 2. Có booking, tới giờ checkout và chưa dọn -> đỏ (cần dọn)
       if(booking){
-        let status='yellow'; // Mặc định vàng (chưa check-in)
-        let priority=3;
+        let status='yellow'; // Mặc định vàng (chờ checkout)
+        let priority=2;
         
-        if(booking.checkedIn){
-          // Đã check-in: kiểm tra nếu tới giờ checkout
-          if(currentMinutes>=outMinutes && !isCleaned){
-            status='red'; // Màu đỏ khi cần dọn
-            priority=1;
-          }else if(isCleaned){
-            status='green'; // Xanh nếu đã dọn
-            priority=2;
-          }else{
-            status='yellow'; // Vàng nếu chưa tới giờ checkout
-            priority=3;
-          }
+        // Kiểm tra nếu tới giờ checkout và chưa dọn
+        if(currentMinutes>=outMinutes && !isCleaned){
+          status='red'; // Màu đỏ khi cần dọn
+          priority=1;
         }
         
         items.push({
@@ -806,7 +793,8 @@ function renderTimeline(){
           status,
           priority,
           isCleaned,
-          sortTime:inMinutes
+          sortTime:inMinutes,
+          outMinutes
         });
       }
     });
@@ -827,12 +815,13 @@ function renderTimeline(){
     eventDiv.className=`event ${item.status}`;
     
     let statusText='';
+    let buttonHtml='';
+    
     if(item.status==='yellow'){
-      statusText='🟡 Chờ check-in';
+      statusText='🟡 Chờ check-out lúc '+item.outTime;
     }else if(item.status==='red'){
-      statusText='🔴 CẦN DỌN (OUT: '+item.outTime+')';
-    }else if(item.status==='green'){
-      statusText='🟢 Đã dọn xong';
+      statusText='🔴 CẦN DỌN NGAY';
+      buttonHtml=`<button onclick="doneCleaning('${item.room}',${item.index})">Đã dọn xong</button>`;
     }
     
     let html=`
@@ -844,8 +833,7 @@ function renderTimeline(){
       ${item.status==='red' ? `<div class="sub">⏰ Khách tiếp: ${item.nextInTime}</div>` : ''}
     </div>
     <div class="event-buttons">
-      ${item.status==='yellow' ? `<button onclick="guestCheckedIn('${item.room}',${item.index})">Đã check-in</button>` : ''}
-      ${item.status==='red' ? `<button onclick="doneCleaning('${item.room}',${item.index})">Đã dọn xong</button>` : ''}
+      ${buttonHtml}
     </div>
     `;
     
@@ -920,18 +908,6 @@ function updateStats(){
     <div class="stat-value">${empty}</div>
   </div>
   `;
-}
-
-function guestCheckedIn(room,index){
-  const dateKey=getDateKey();
-  const bookingKey=`${dateKey}-${room}-${index}`;
-  if(bookings[bookingKey]){
-    bookings[bookingKey].checkedIn=true;
-    saveData();
-    renderTimeline();
-    renderBookingSheet();
-    updateStats();
-  }
 }
 
 function doneCleaning(room,index){
