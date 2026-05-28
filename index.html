@@ -2,293 +2,367 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Homestay Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:Arial, sans-serif;
-    }
+<title>🍄 Nấm Homestay</title>
 
-    body{
-      background:#f5f5f5;
-      padding:20px;
-    }
+<style>
 
-    h1{
-      margin-bottom:20px;
-      font-size:28px;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
 
-    .room{
-      background:white;
-      border-radius:20px;
-      padding:20px;
-      margin-bottom:20px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.08);
-      border-left:10px solid #ccc;
-    }
+body{
+  background:#f5f2eb;
+  color:#2b2b2b;
+  padding:16px;
+}
 
-    .danger{
-      border-left-color:#ff4d4f;
-      background:#fff1f0;
-    }
+.header{
+  margin-bottom:20px;
+}
 
-    .safe{
-      border-left-color:#52c41a;
-    }
+.title{
+  font-size:30px;
+  font-weight:bold;
+}
 
-    .room-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:15px;
-      gap:10px;
-    }
+.subtitle{
+  color:#666;
+  margin-top:6px;
+}
 
-    .room-name{
-      font-size:24px;
-      font-weight:bold;
-    }
+.calendar{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  margin-bottom:20px;
+}
 
-    .status{
-      padding:10px 14px;
-      border-radius:14px;
-      color:white;
-      font-weight:bold;
-      font-size:14px;
-    }
+.day{
+  min-width:70px;
+  background:white;
+  border-radius:16px;
+  padding:14px;
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
 
-    .status-danger{
-      background:#ff4d4f;
-    }
+.day.active{
+  background:#354f3f;
+  color:white;
+}
 
-    .status-safe{
-      background:#52c41a;
-    }
+.section{
+  background:white;
+  border-radius:24px;
+  padding:18px;
+  margin-bottom:20px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.06);
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
+.section-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
 
-    .card{
-      background:#fafafa;
-      padding:15px;
-      border-radius:16px;
-    }
+table{
+  width:100%;
+  border-collapse:collapse;
+}
 
-    .label{
-      color:#888;
-      margin-bottom:8px;
-      font-size:14px;
-    }
+th{
+  text-align:left;
+  padding-bottom:12px;
+  color:#777;
+  font-size:14px;
+}
 
-    .value{
-      font-size:22px;
-      font-weight:bold;
-    }
+td{
+  padding:14px 0;
+  border-top:1px solid #eee;
+  font-size:15px;
+}
 
-    .red{
-      color:#ff4d4f;
-    }
+.room{
+  font-weight:bold;
+}
 
-    .green{
-      color:#52c41a;
-    }
+.note{
+  color:#999;
+  font-size:13px;
+}
 
-    .warning{
-      margin-top:16px;
-      background:#fff2e8;
-      padding:16px;
-      border-radius:16px;
-      border:2px solid #ffbb96;
-    }
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
 
-    .warning-title{
-      color:#d4380d;
-      font-weight:bold;
-      font-size:18px;
-      margin-bottom:8px;
-    }
+.event{
+  padding:16px;
+  border-radius:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
 
-    button{
-      margin-top:12px;
-      width:100%;
-      border:none;
-      padding:14px;
-      border-radius:14px;
-      background:#52c41a;
-      color:white;
-      font-size:16px;
-      font-weight:bold;
-    }
+.white{
+  background:white;
+  border:2px solid #eee;
+}
 
-    .timeline{
-      margin-top:30px;
-      background:white;
-      padding:20px;
-      border-radius:20px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    }
+.yellow{
+  background:#fff9db;
+}
 
-    .timeline h2{
-      margin-bottom:20px;
-    }
+.red{
+  background:#ffe3e3;
+}
 
-    .event{
-      padding:16px;
-      border-radius:16px;
-      margin-bottom:14px;
-      display:flex;
-      gap:16px;
-      align-items:center;
-    }
+.green{
+  background:#d3f9d8;
+}
 
-    .event-time{
-      font-size:24px;
-      font-weight:bold;
-    }
+.event-left{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
 
-    .event-red{
-      background:#fff1f0;
-    }
+.time{
+  font-size:24px;
+  font-weight:bold;
+}
 
-    .event-orange{
-      background:#fff7e6;
-    }
+.event-title{
+  font-weight:bold;
+}
 
-    .event-green{
-      background:#f6ffed;
-    }
+.event-sub{
+  color:#666;
+  font-size:14px;
+}
 
-    @media(max-width:700px){
-      .grid{
-        grid-template-columns:1fr;
-      }
+button{
+  border:none;
+  background:#2b8a3e;
+  color:white;
+  padding:12px 16px;
+  border-radius:14px;
+  font-weight:bold;
+}
 
-      .room-header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-    }
-  </style>
+.add{
+  margin-top:16px;
+  display:grid;
+  gap:12px;
+}
+
+input{
+  padding:14px;
+  border-radius:14px;
+  border:1px solid #ddd;
+}
+
+.add-btn{
+  background:#354f3f;
+}
+
+@media(min-width:900px){
+
+  .desktop{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:20px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <h1>🏨 Homestay Dashboard</h1>
+<div class="header">
+  <div class="title">🍄 Nấm Homestay</div>
+  <div class="subtitle">
+    Operation Dashboard
+  </div>
+</div>
 
-  <div class="room danger">
-    <div class="room-header">
-      <div class="room-name">Midori</div>
+<div class="calendar">
 
-      <div class="status status-danger">
-        🚨 CẦN DỌN GẤP
-      </div>
-    </div>
+  <div class="day">27</div>
 
-    <div class="grid">
-      <div class="card">
-        <div class="label">Khách hiện tại</div>
-        <div class="value">Quỳnh</div>
-      </div>
-
-      <div class="card">
-        <div class="label">Check-out</div>
-        <div class="value red">13:00</div>
-      </div>
-
-      <div class="card">
-        <div class="label">Khách tiếp theo</div>
-        <div class="value">Tâm</div>
-      </div>
-
-      <div class="card">
-        <div class="label">Check-in mới</div>
-        <div class="value red">13:30</div>
-      </div>
-    </div>
-
-    <div class="warning">
-      <div class="warning-title">
-        Còn 30 phút để dọn phòng
-      </div>
-
-      Ưu tiên phòng này trước khi khách mới check-in.
-
-      <button>✅ Đã dọn xong</button>
-    </div>
+  <div class="day active">
+    28
   </div>
 
-  <div class="room safe">
-    <div class="room-header">
-      <div class="room-name">Truffle</div>
+  <div class="day">29</div>
 
-      <div class="status status-safe">
-        ✅ Đã sẵn sàng
-      </div>
-    </div>
+  <div class="day">30</div>
 
-    <div class="grid">
-      <div class="card">
-        <div class="label">Khách hiện tại</div>
-        <div class="value">Minh</div>
-      </div>
+  <div class="day">31</div>
 
-      <div class="card">
-        <div class="label">Check-out</div>
-        <div class="value green">15:00</div>
-      </div>
+</div>
 
-      <div class="card">
-        <div class="label">Khách tiếp theo</div>
-        <div class="value">Chưa có</div>
-      </div>
+<div class="desktop">
 
-      <div class="card">
-        <div class="label">Trạng thái</div>
-        <div class="value green">Phòng trống</div>
-      </div>
-    </div>
-  </div>
+<div>
 
-  <div class="timeline">
-    <h2>📅 Timeline hôm nay</h2>
+<div class="section">
 
-    <div class="event event-red">
-      <div class="event-time">13:00</div>
+<div class="section-title">
+📋 Booking Sheet
+</div>
 
-      <div>
-        <strong>Midori check-out</strong><br>
-        Có khách mới lúc 13:30
-      </div>
-    </div>
+<table>
 
-    <div class="event event-orange">
-      <div class="event-time">14:00</div>
+<tr>
+<th>Room</th>
+<th>Guest</th>
+<th>In</th>
+<th>Out</th>
+</tr>
 
-      <div>
-        <strong>Đang dọn Truffle</strong><br>
-        Còn 20 phút
-      </div>
-    </div>
+<tr>
+<td class="room">Midori</td>
+<td>
+Quỳnh
+<div class="note">birthday</div>
+</td>
+<td>13:00</td>
+<td>10:00</td>
+</tr>
 
-    <div class="event event-green">
-      <div class="event-time">15:00</div>
+<tr>
+<td class="room">Truffle</td>
+<td>
+Minh
+<div class="note">extra bed</div>
+</td>
+<td>14:00</td>
+<td>11:00</td>
+</tr>
 
-      <div>
-        <strong>Porcini đã sẵn sàng</strong><br>
-        Có thể check-in
-      </div>
-    </div>
+<tr>
+<td class="room">Porcini</td>
+<td>
+Tâm
+<div class="note">late check-in</div>
+</td>
+<td>15:00</td>
+<td>12:00</td>
+</tr>
 
-  </div>
+</table>
+
+<div class="add">
+
+<input placeholder="Tên khách"/>
+
+<input placeholder="Tên phòng"/>
+
+<input placeholder="Giờ check-in"/>
+
+<input placeholder="Giờ check-out"/>
+
+<input placeholder="Note"/>
+
+<button class="add-btn">
++ Thêm booking
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div>
+
+<div class="section">
+
+<div class="section-title">
+⏳ Operation Timeline
+</div>
+
+<div class="timeline">
+
+<div class="event white">
+
+<div class="event-left">
+<div class="time">09:30</div>
+<div class="event-title">
+⚪ Midori chưa tới giờ
+</div>
+<div class="event-sub">
+Khách out lúc 10:00
+</div>
+</div>
+
+</div>
+
+<div class="event yellow">
+
+<div class="event-left">
+<div class="time">09:45</div>
+<div class="event-title">
+🟡 Midori sắp cần dọn
+</div>
+<div class="event-sub">
+Khách mới lúc 13:00
+</div>
+</div>
+
+</div>
+
+<div class="event red">
+
+<div class="event-left">
+<div class="time">10:00</div>
+<div class="event-title">
+🔴 Midori cần dọn
+</div>
+<div class="event-sub">
+Ưu tiên phòng này
+</div>
+</div>
+
+<button>
+Đã dọn xong
+</button>
+
+</div>
+
+<div class="event green">
+
+<div class="event-left">
+<div class="time">10:20</div>
+<div class="event-title">
+🟢 Midori READY
+</div>
+<div class="event-sub">
+Sẵn sàng check-in
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
