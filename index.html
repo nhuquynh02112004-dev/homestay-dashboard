@@ -1,4 +1,4 @@
-```html
+```html id="a2p9xm"
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -34,7 +34,7 @@ opacity:0.9;
 }
 
 .month{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 margin-bottom:14px;
 }
@@ -45,19 +45,30 @@ gap:10px;
 overflow:auto;
 padding-bottom:10px;
 margin-bottom:20px;
+flex-wrap:wrap;
 }
 
 .day{
-min-width:80px;
+min-width:70px;
 padding:14px;
 border-radius:18px;
 background:rgba(255,255,255,0.2);
 text-align:center;
 font-weight:bold;
 cursor:pointer;
+transition:0.2s;
 }
 
-.day.active{
+.day:hover{
+transform:scale(1.03);
+}
+
+.month-btn{
+background:#7fb77e;
+color:white;
+}
+
+.active-date{
 background:white;
 color:#4d6b4d;
 }
@@ -127,8 +138,12 @@ background:#f5f5f5;
 border-radius:14px;
 padding:10px;
 cursor:pointer;
-min-width:150px;
+min-width:160px;
 transition:0.2s;
+}
+
+.slot:hover{
+background:#ececec;
 }
 
 .slot.active{
@@ -136,8 +151,9 @@ background:#fff3bf;
 border:2px solid #ffe066;
 }
 
-.slot:hover{
-background:#ececec;
+.green-slot{
+background:#b2f2bb !important;
+border:2px solid #69db7c !important;
 }
 
 .slot-time{
@@ -267,7 +283,7 @@ Operation Dashboard
 </div>
 
 <div class="month">
-May / June 2025
+May 2025
 </div>
 
 <div class="calendar" id="calendar"></div>
@@ -335,7 +351,7 @@ Lưu booking
 
 <script>
 
-const rooms = {
+const rooms={
 
 Midori:[
 ["10:00","13:00"],
@@ -374,28 +390,92 @@ Shitake:[
 
 };
 
-let currentSlot=null;
 const bookings={};
 
-const calendar=document.getElementById('calendar');
+let currentSlot=null;
 
-for(let i=28;i<=31;i++){
+const calendar=
+document.getElementById('calendar');
 
-calendar.innerHTML+=
-`<div class="day ${i===28?'active':''}"
-onclick="selectDay(this)">
-${i}/5
-</div>`;
+const monthTitle=
+document.querySelector('.month');
+
+const months=[
+
+{ name:'May', month:5, days:31 },
+{ name:'June', month:6, days:30 },
+{ name:'July', month:7, days:31 },
+{ name:'August', month:8, days:31 },
+{ name:'September', month:9, days:30 },
+{ name:'October', month:10, days:31 },
+{ name:'November', month:11, days:30 },
+{ name:'December', month:12, days:31 }
+
+];
+
+let currentMonth=5;
+
+renderCalendar(currentMonth);
+
+function renderCalendar(month){
+
+calendar.innerHTML='';
+
+const selected=
+months.find(m=>m.month===month);
+
+monthTitle.innerHTML=
+`${selected.name} 2025`;
+
+months.forEach(m=>{
+
+calendar.innerHTML+=`
+
+<div class="day month-btn"
+
+onclick="changeMonth(${m.month})">
+
+${m.month}
+
+</div>
+
+`;
+
+});
+
+for(let i=1;i<=selected.days;i++){
+
+calendar.innerHTML+=`
+
+<div class="day date-btn
+${i===1?'active-date':''}"
+
+onclick="selectDate(this)">
+
+${i}/${month}
+
+</div>
+
+`;
 
 }
 
-for(let i=1;i<=30;i++){
+}
 
-calendar.innerHTML+=
-`<div class="day"
-onclick="selectDay(this)">
-${i}/6
-</div>`;
+function changeMonth(month){
+
+currentMonth=month;
+
+renderCalendar(month);
+
+}
+
+function selectDate(el){
+
+document.querySelectorAll('.date-btn')
+.forEach(d=>d.classList.remove('active-date'));
+
+el.classList.add('active-date');
 
 }
 
@@ -471,6 +551,9 @@ times.forEach((time,index)=>{
 const inTime=time[0];
 const outTime=time[1];
 
+const inMinutes=
+timeToMinutes(inTime);
+
 const outMinutes=
 timeToMinutes(outTime);
 
@@ -478,11 +561,19 @@ const booking=
 bookings[`${room}-${index}`];
 
 let status='normal';
-let priority=3;
+let priority=4;
+
+if(booking){
+
+status='yellow';
+priority=2;
+
+}
 
 if(
+booking &&
 currentMinutes>=outMinutes &&
-currentMinutes<outMinutes+60
+currentMinutes<inMinutes
 ){
 
 status='red';
@@ -490,10 +581,24 @@ priority=1;
 
 }
 
-else if(booking){
+if(
+booking &&
+booking.cleaned &&
+currentMinutes<inMinutes
+){
 
-status='yellow';
-priority=2;
+status='green';
+priority=3;
+
+}
+
+if(
+booking &&
+booking.checkedIn
+){
+
+status='green';
+priority=3;
 
 }
 
@@ -530,8 +635,7 @@ items.forEach(item=>{
 
 timeline.innerHTML+=`
 
-<div class="event ${item.status}"
-id="event-${item.room}-${item.index}">
+<div class="event ${item.status}">
 
 <div>
 
@@ -552,10 +656,10 @@ ${item.booking
 :''
 }
 
-${item.booking
+${item.status==='yellow'
 ?`
 <div class="sub">
-🚨 Có khách khung sau
+🟡 Có booking
 </div>
 `
 :''
@@ -573,7 +677,7 @@ ${item.status==='red'
 ${item.status==='green'
 ?`
 <div class="sub">
-🟢 READY
+🟢 READY / ĐÃ IN
 </div>
 `
 :''
@@ -582,6 +686,16 @@ ${item.status==='green'
 </div>
 
 <div>
+
+${item.status==='yellow'
+?`
+<button
+onclick="guestCheckedIn('${item.room}',${item.index})">
+Đã in
+</button>
+`
+:''
+}
 
 ${item.status==='red'
 ?`
@@ -603,31 +717,53 @@ onclick="doneCleaning('${item.room}',${item.index})">
 
 }
 
-function doneCleaning(room,index){
+function renderBookingSheet(){
 
-const item=
-document.getElementById(
-`event-${room}-${index}`
+Object.entries(bookings).forEach(([key,data])=>{
+
+const slot=
+document.getElementById(key);
+
+slot.classList.remove(
+'active',
+'green-slot'
 );
 
-item.classList.remove('red');
+if(data.checkedIn){
 
-item.classList.add('green');
-
-item.querySelector('.event-title')
-.innerHTML+=` ✅ READY`;
-
-item.querySelector('button')
-.remove();
+slot.classList.add('green-slot');
 
 }
 
-function selectDay(el){
+else{
 
-document.querySelectorAll('.day')
-.forEach(d=>d.classList.remove('active'));
+slot.classList.add('active');
 
-el.classList.add('active');
+}
+
+});
+
+}
+
+function doneCleaning(room,index){
+
+const key=`${room}-${index}`;
+
+bookings[key].cleaned=true;
+
+renderTimeline();
+renderBookingSheet();
+
+}
+
+function guestCheckedIn(room,index){
+
+const key=`${room}-${index}`;
+
+bookings[key].checkedIn=true;
+
+renderTimeline();
+renderBookingSheet();
 
 }
 
@@ -656,7 +792,9 @@ bookings[
 `${currentSlot.room}-${currentSlot.index}`
 ]={
 name,
-note
+note,
+checkedIn:false,
+cleaned:false
 };
 
 document.getElementById(
@@ -674,6 +812,7 @@ document.getElementById('guestName').value='';
 document.getElementById('guestNote').value='';
 
 renderTimeline();
+renderBookingSheet();
 
 }
 
