@@ -46,11 +46,12 @@ margin-bottom:12px;
 display:flex;
 gap:10px;
 overflow:auto;
+padding-bottom:10px;
 margin-bottom:20px;
 }
 
 .day{
-min-width:70px;
+min-width:80px;
 padding:14px;
 border-radius:18px;
 background:rgba(255,255,255,0.2);
@@ -115,6 +116,7 @@ text-align:center;
 font-weight:bold;
 text-align:left;
 min-width:120px;
+font-size:16px;
 }
 
 .slot{
@@ -122,12 +124,11 @@ background:#f5f5f5;
 border-radius:14px;
 padding:10px;
 cursor:pointer;
-transition:0.2s;
-min-width:140px;
+min-width:150px;
 }
 
 .slot:hover{
-background:#e9ecef;
+background:#ececec;
 }
 
 .slot-time{
@@ -136,10 +137,10 @@ font-size:15px;
 color:#222;
 }
 
-.slot-note{
-font-size:12px;
-margin-top:6px;
-color:#666;
+.slot-guest{
+margin-top:8px;
+font-size:13px;
+color:#555;
 }
 
 .timeline{
@@ -157,9 +158,10 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 gap:14px;
+transition:0.2s;
 }
 
-.white{
+.normal{
 background:#f5f5f5;
 }
 
@@ -265,19 +267,7 @@ Operation Dashboard
 May / June 2025
 </div>
 
-<div class="calendar">
-
-<div class="day active" onclick="selectDay(this)">28/5</div>
-<div class="day" onclick="selectDay(this)">29/5</div>
-<div class="day" onclick="selectDay(this)">30/5</div>
-<div class="day" onclick="selectDay(this)">31/5</div>
-
-<div class="day" onclick="selectDay(this)">1/6</div>
-<div class="day" onclick="selectDay(this)">2/6</div>
-<div class="day" onclick="selectDay(this)">3/6</div>
-<div class="day" onclick="selectDay(this)">4/6</div>
-
-</div>
+<div class="calendar" id="calendar"></div>
 
 <div class="layout">
 
@@ -298,6 +288,48 @@ May / June 2025
 <th>Ca 3</th>
 <th>Đêm</th>
 </tr>
+
+<tbody id="bookingTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="section-title">
+⏳ Timeline dọn phòng
+</div>
+
+<div class="timeline" id="timeline"></div>
+
+</div>
+
+</div>
+
+<div class="popup" id="popup">
+
+<div class="popup-box">
+
+<div class="popup-title" id="popupTitle">
+Booking
+</div>
+
+<input id="guestInput" placeholder="Tên khách"/>
+
+<textarea id="noteInput"
+placeholder="Ghi chú"></textarea>
+
+<button class="save-btn"
+onclick="closePopup()">
+Lưu
+</button>
+
+</div>
+
+</div>
 
 <script>
 
@@ -340,12 +372,40 @@ Shitake:[
 
 };
 
-document.write(
-Object.entries(rooms).map(([room,times])=>`
+const calendar=document.getElementById('calendar');
+
+for(let i=28;i<=31;i++){
+
+calendar.innerHTML+=
+`<div class="day ${i===28?'active':''}"
+onclick="selectDay(this)">
+${i}/5
+</div>`;
+
+}
+
+for(let i=1;i<=30;i++){
+
+calendar.innerHTML+=
+`<div class="day"
+onclick="selectDay(this)">
+${i}/6
+</div>`;
+
+}
+
+const bookingTable=
+document.getElementById('bookingTable');
+
+Object.entries(rooms).forEach(([room,times])=>{
+
+bookingTable.innerHTML+=`
 
 <tr>
 
-<td class="room">${room}</td>
+<td class="room">
+${room}
+</td>
 
 ${times.map((time,index)=>`
 
@@ -358,8 +418,8 @@ onclick="openPopup('${room} - Ca ${index+1}')">
 ${time}
 </div>
 
-<div class="slot-note">
-Tap để thêm khách
+<div class="slot-guest">
+Trống
 </div>
 
 </div>
@@ -370,127 +430,58 @@ Tap để thêm khách
 
 </tr>
 
-`).join('')
-);
+`;
 
-</script>
+});
 
-</table>
+const timeline=document.getElementById('timeline');
 
-</div>
+const timelineData=[
 
-</div>
+["Midori","13:00","14:00"],
+["Truffle","13:30","14:30"],
+["Matutake","14:00","15:00"],
+["Porcini","14:30","15:30"],
+["Shitake","15:00","16:00"],
 
-<div class="section">
-
-<div class="section-title">
-⏳ Timeline dọn phòng
-</div>
-
-<div class="timeline" id="timeline">
-
-<script>
-
-const timelineData = [
-
-["10:00","Midori","13:00","13:30"],
-["10:30","Truffle","13:30","14:00"],
-["11:00","Matutake","14:00","14:30"],
-["11:30","Porcini","14:30","15:00"],
-["12:00","Shitake","15:00","15:30"],
-
-["13:30","Midori","16:30","17:00"],
-["14:00","Truffle","17:00","17:30"],
-["14:30","Matutake","17:30","18:00"],
-["15:00","Porcini","18:00","18:30"],
-["15:30","Shitake","18:30","19:00"],
-
-["17:00","Midori","20:00","20:30"],
-["17:30","Truffle","20:30","21:00"],
-["18:00","Matutake","21:00","21:30"],
-["18:30","Porcini","21:30","22:00"],
-["19:00","Shitake","22:00","22:30"],
-
-["20:30","Midori","09:30","-"],
-["21:00","Truffle","10:00","-"],
-["21:30","Matutake","10:30","-"],
-["22:00","Porcini","11:00","-"],
-["22:30","Shitake","11:30","-"]
+["Midori","16:30","17:00"],
+["Truffle","17:00","17:30"],
+["Matutake","17:30","18:00"],
+["Porcini","18:00","18:30"],
+["Shitake","18:30","19:00"]
 
 ];
 
-document.write(
+timelineData.forEach((item,index)=>{
 
-timelineData.map((item,index)=>`
+timeline.innerHTML+=`
 
-<div class="event white"
-id="room${index}">
+<div class="event normal"
+id="event${index}">
 
 <div class="left">
 
 <div class="time">
-${item[0]}
+OUT ${item[1]}
 </div>
 
 <div class="event-title">
-${item[1]}
+${item[0]}
 </div>
 
 <div class="sub">
-OUT: ${item[2]}
-</div>
-
-<div class="sub">
-IN KHUNG SAU: ${item[3]}
-</div>
-
-<div class="sub">
-🚨 Có khách khung sau
+IN KHUNG SAU: ${item[2]}
 </div>
 
 </div>
 
-<button
-onclick="doneCleaning('room${index}',this)">
-Đã dọn xong
-</button>
+<div id="btn${index}"></div>
 
 </div>
 
-`).join('')
+`;
 
-);
-
-</script>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="popup" id="popup">
-
-<div class="popup-box">
-
-<div class="popup-title" id="popupTitle">
-Booking
-</div>
-
-<input placeholder="Tên khách"/>
-
-<textarea placeholder="Ghi chú khách"></textarea>
-
-<button class="save-btn"
-onclick="closePopup()">
-Lưu
-</button>
-
-</div>
-
-</div>
-
-<script>
+});
 
 function selectDay(el){
 
@@ -518,23 +509,46 @@ document.getElementById('popup')
 
 }
 
-function doneCleaning(id,btn){
+function triggerCleaning(index){
 
-const item=document.getElementById(id);
+const item=
+document.getElementById(`event${index}`);
 
-item.classList.remove('white');
+const btn=
+document.getElementById(`btn${index}`);
+
+item.classList.remove('normal');
+
+item.classList.add('red');
+
+btn.innerHTML=
+`<button onclick="doneCleaning(${index})">
+Đã dọn xong
+</button>`;
+
+}
+
+function doneCleaning(index){
+
+const item=
+document.getElementById(`event${index}`);
+
+const btn=
+document.getElementById(`btn${index}`);
+
+item.classList.remove('red');
 
 item.classList.add('green');
 
 item.querySelector('.event-title')
-.innerHTML+=' ✅';
+.innerHTML+=' ✅ READY';
 
-btn.innerHTML='DONE';
-
-document.getElementById('timeline')
-.appendChild(item);
+btn.innerHTML='';
 
 }
+
+setTimeout(()=>triggerCleaning(0),2000);
+setTimeout(()=>triggerCleaning(1),6000);
 
 </script>
 
