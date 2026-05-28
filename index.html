@@ -16,7 +16,7 @@ font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body{
-background:linear-gradient(135deg, #E8D4F8 0%, #D4E8F8 100%);
+background:linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
 min-height:100vh;
 padding:12px;
 color:#333;
@@ -40,24 +40,19 @@ margin-bottom:8px;
 }
 
 .logo{
-width:50px;
-height:50px;
+width:45px;
+height:45px;
+flex-shrink:0;
 }
 
 .title{
 font-size:28px;
 font-weight:700;
-background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 background-clip:text;
 margin:0;
-}
-
-.subtitle{
-font-size:13px;
-color:#999;
-margin-top:4px;
 }
 
 .month-selector{
@@ -70,9 +65,9 @@ margin:16px 0 0 0;
 
 .month-btn{
 padding:8px 14px;
-border:2px solid #E8B4E0;
+border:2px solid #C8E6C9;
 background:white;
-color:#D13B92;
+color:#2E7D32;
 border-radius:12px;
 font-weight:600;
 cursor:pointer;
@@ -82,13 +77,13 @@ font-size:12px;
 
 .month-btn:hover{
 transform:translateY(-2px);
-box-shadow:0 4px 12px rgba(209, 59, 146, 0.2);
+box-shadow:0 4px 12px rgba(46, 125, 50, 0.2);
 }
 
 .month-btn.active{
-background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 color:white;
-border-color:#D13B92;
+border-color:#1B5E20;
 }
 
 .calendar{
@@ -106,25 +101,25 @@ max-width:100%;
 .day{
 padding:10px 6px;
 border-radius:12px;
-background:#F5E6F3;
+background:#F1F8F6;
 text-align:center;
 font-weight:600;
 cursor:pointer;
 transition:all 0.3s ease;
 font-size:12px;
-color:#D13B92;
+color:#2E7D32;
 border:2px solid transparent;
 }
 
 .day:hover{
 transform:scale(1.05);
-background:#E8D4F8;
+background:#E0F2F1;
 }
 
 .day.active-date{
-background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 color:white;
-border-color:#D13B92;
+border-color:#1B5E20;
 font-weight:700;
 }
 
@@ -179,13 +174,13 @@ padding:10px 6px;
 text-align:center;
 color:#999;
 font-weight:600;
-border-bottom:2px solid #F0E6F0;
+border-bottom:2px solid #E8F5E9;
 background:#FAFAFA;
 }
 
 td{
 padding:8px 4px;
-border-bottom:1px solid #F5E6F3;
+border-bottom:1px solid #E8F5E9;
 text-align:center;
 }
 
@@ -194,8 +189,8 @@ font-weight:700;
 text-align:left;
 min-width:80px;
 font-size:14px;
-color:#D13B92;
-background:#F5E6F3;
+color:#2E7D32;
+background:#F1F8F6;
 position:sticky;
 left:0;
 z-index:2;
@@ -204,7 +199,7 @@ border-radius:8px;
 }
 
 .slot{
-background:#F5E6F3;
+background:#F1F8F6;
 border-radius:10px;
 padding:8px 4px;
 cursor:pointer;
@@ -215,26 +210,26 @@ font-size:12px;
 }
 
 .slot:hover{
-background:#E8D4F8;
-border-color:#E84393;
+background:#E0F2F1;
+border-color:#2E7D32;
 }
 
 .slot.active{
-background:linear-gradient(135deg, #FFE8A8 0%, #FFD666 100%);
-border:2px solid #FFC107;
-box-shadow:0 2px 8px rgba(255, 193, 7, 0.3);
+background:linear-gradient(135deg, #FFF9C4 0%, #FFEE58 100%);
+border:2px solid #FDD835;
+box-shadow:0 2px 8px rgba(253, 216, 53, 0.3);
 }
 
 .green-slot{
-background:linear-gradient(135deg, #A8E6C1 0%, #7BDCA3 100%) !important;
-border:2px solid #52C77D !important;
-box-shadow:0 2px 8px rgba(82, 199, 125, 0.3) !important;
+background:linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%) !important;
+border:2px solid #66BB6A !important;
+box-shadow:0 2px 8px rgba(102, 187, 106, 0.3) !important;
 }
 
 .slot-time{
 font-weight:700;
 font-size:12px;
-color:#D13B92;
+color:#2E7D32;
 }
 
 .slot-guest{
@@ -266,26 +261,26 @@ font-size:13px;
 }
 
 .event.normal{
-background:linear-gradient(135deg, #F5E6F3 0%, #F0E6F5 100%);
-border-left:4px solid #E8B4E0;
+background:linear-gradient(135deg, #F1F8F6 0%, #E8F5E9 100%);
+border-left:4px solid #C8E6C9;
 }
 
 .event.yellow{
-background:linear-gradient(135deg, #FFF8E1 0%, #FFF3BF 100%);
-border-left:4px solid #FFD666;
-box-shadow:0 2px 8px rgba(255, 193, 7, 0.2);
+background:linear-gradient(135deg, #FFF9C4 0%, #FFEE58 100%);
+border-left:4px solid #FDD835;
+box-shadow:0 2px 8px rgba(253, 216, 53, 0.2);
 }
 
 .event.red{
 background:linear-gradient(135deg, #FFEBEE 0%, #FFCDD2 100%);
-border-left:4px solid #E84393;
-box-shadow:0 2px 8px rgba(232, 67, 147, 0.2);
+border-left:4px solid #E57373;
+box-shadow:0 2px 8px rgba(229, 115, 115, 0.2);
 }
 
 .event.green{
 background:linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
-border-left:4px solid #52C77D;
-box-shadow:0 2px 8px rgba(82, 199, 125, 0.2);
+border-left:4px solid #66BB6A;
+box-shadow:0 2px 8px rgba(102, 187, 106, 0.2);
 }
 
 .event-content{
@@ -295,7 +290,7 @@ flex:1;
 .time{
 font-size:16px;
 font-weight:700;
-color:#D13B92;
+color:#2E7D32;
 }
 
 .event-title{
@@ -314,13 +309,14 @@ margin-top:4px;
 .event-buttons{
 display:flex;
 gap:8px;
+flex-wrap:wrap;
 }
 
 button{
 border:none;
 padding:8px 12px;
 border-radius:10px;
-background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 color:white;
 font-weight:600;
 cursor:pointer;
@@ -331,7 +327,7 @@ white-space:nowrap;
 
 button:hover{
 transform:translateY(-2px);
-box-shadow:0 4px 12px rgba(209, 59, 146, 0.3);
+box-shadow:0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 button:active{
@@ -384,11 +380,11 @@ margin-bottom:16px;
 .popup-title{
 font-size:18px;
 font-weight:700;
-color:#D13B92;
+color:#2E7D32;
 }
 
 .btn-close{
-background:#E8B4E0 !important;
+background:#E8F5E9 !important;
 color:#333 !important;
 padding:6px 10px !important;
 margin:0 !important;
@@ -396,14 +392,14 @@ font-size:16px;
 }
 
 .btn-close:hover{
-background:#D4A0D0 !important;
+background:#C8E6C9 !important;
 }
 
 input,textarea{
 width:100%;
 padding:12px;
 border-radius:12px;
-border:2px solid #E8B4E0;
+border:2px solid #C8E6C9;
 margin-bottom:12px;
 font-size:14px;
 font-family:inherit;
@@ -412,23 +408,29 @@ transition:all 0.3s ease;
 
 input:focus,textarea:focus{
 outline:none;
-border-color:#D13B92;
-box-shadow:0 0 0 3px rgba(209, 59, 146, 0.1);
+border-color:#2E7D32;
+box-shadow:0 0 0 3px rgba(46, 125, 50, 0.1);
 background:#FFFBFE;
 }
 
-.btn-delete{
-background:#FF6B6B !important;
-width:100%;
-}
-
-.btn-delete:hover{
-background:#FF5252 !important;
+.button-group{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:16px;
 }
 
 .btn-save{
-background:linear-gradient(135deg, #E84393 0%, #D13B92 100%);
-width:100%;
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
+grid-column:1 / -1;
+}
+
+.btn-delete{
+background:#E57373;
+}
+
+.btn-delete:hover{
+background:#EF5350;
 }
 
 .stats{
@@ -437,11 +439,11 @@ grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
 gap:12px;
 margin-top:14px;
 padding-top:14px;
-border-top:2px solid #F5E6F3;
+border-top:2px solid #E8F5E9;
 }
 
 .stat-item{
-background:linear-gradient(135deg, #F5E6F3 0%, #F0E6F5 100%);
+background:linear-gradient(135deg, #F1F8F6 0%, #E8F5E9 100%);
 padding:12px;
 border-radius:12px;
 text-align:center;
@@ -456,19 +458,19 @@ font-weight:600;
 .stat-value{
 font-size:20px;
 font-weight:700;
-color:#D13B92;
+color:#2E7D32;
 margin-top:4px;
 }
 
 .export-btn{
-background:linear-gradient(135deg, #52C77D 0%, #389E0D 100%);
+background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
 width:100%;
 margin-top:12px !important;
 }
 
 .export-btn:hover{
 transform:translateY(-2px);
-box-shadow:0 4px 12px rgba(82, 199, 125, 0.3);
+box-shadow:0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 @media(max-width:480px){
@@ -498,6 +500,14 @@ button{
 font-size:11px;
 padding:6px 10px;
 }
+
+.button-group{
+grid-template-columns:1fr;
+}
+
+.btn-delete{
+grid-column:1 / -1;
+}
 }
 
 </style>
@@ -509,35 +519,34 @@ padding:6px 10px;
 <div class="logo-container">
 <svg class="logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <!-- Vòng ngoài -->
-  <circle cx="100" cy="100" r="95" fill="#8B1538" opacity="0.95"/>
+  <circle cx="100" cy="100" r="95" fill="#1B5E20" opacity="0.9"/>
   
   <!-- Cái nấm -->
-  <ellipse cx="100" cy="75" rx="55" ry="48" fill="#FF69B4"/>
+  <ellipse cx="100" cy="70" rx="55" ry="48" fill="#81C784"/>
   
   <!-- Chấm trên nấm -->
-  <ellipse cx="75" cy="55" rx="12" ry="15" fill="#8B1538"/>
-  <ellipse cx="100" cy="45" rx="10" ry="14" fill="#8B1538"/>
-  <ellipse cx="125" cy="55" rx="12" ry="15" fill="#8B1538"/>
-  <ellipse cx="85" cy="70" rx="9" ry="12" fill="#8B1538"/>
-  <ellipse cx="115" cy="70" rx="9" ry="12" fill="#8B1538"/>
+  <ellipse cx="75" cy="50" rx="12" ry="15" fill="#1B5E20"/>
+  <ellipse cx="100" cy="40" rx="10" ry="14" fill="#1B5E20"/>
+  <ellipse cx="125" cy="50" rx="12" ry="15" fill="#1B5E20"/>
+  <ellipse cx="85" cy="65" rx="9" ry="12" fill="#1B5E20"/>
+  <ellipse cx="115" cy="65" rx="9" ry="12" fill="#1B5E20"/>
   
   <!-- Mỏ nấm -->
-  <path d="M 65 85 Q 65 110 100 120 Q 135 110 135 85" fill="#FF69B4"/>
-  <path d="M 70 90 L 72 115" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 80 90 L 82 118" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 90 92 L 92 120" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 100 93 L 100 122" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 110 92 L 108 120" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 120 90 L 118 118" stroke="#8B1538" stroke-width="2" fill="none"/>
-  <path d="M 130 90 L 128 115" stroke="#8B1538" stroke-width="2" fill="none"/>
+  <path d="M 65 80 Q 65 105 100 115 Q 135 105 135 80" fill="#81C784"/>
+  <path d="M 70 85 L 72 110" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 80 85 L 82 113" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 90 87 L 92 115" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 100 88 L 100 117" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 110 87 L 108 115" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 120 85 L 118 113" stroke="#1B5E20" stroke-width="2" fill="none"/>
+  <path d="M 130 85 L 128 110" stroke="#1B5E20" stroke-width="2" fill="none"/>
   
   <!-- Cuống nấm -->
-  <rect x="85" y="115" width="30" height="50" fill="#FF69B4" rx="5"/>
+  <rect x="85" y="110" width="30" height="50" fill="#81C784" rx="5"/>
 </svg>
 
 <div>
   <h1 class="title">Nấm Homestay</h1>
-  <p class="subtitle">Operation Dashboard</p>
 </div>
 </div>
 
@@ -595,9 +604,10 @@ padding:6px 10px;
 <input id="guestName" placeholder="Tên khách"/>
 <textarea id="guestNote" placeholder="Ghi chú" rows="3"></textarea>
 
-<button class="btn-save" onclick="saveBooking()">Lưu booking</button>
-
-<button class="btn-delete" onclick="deleteBooking()" style="display:none;">Xóa booking</button>
+<div class="button-group">
+  <button class="btn-save" onclick="saveBooking()">Lưu booking</button>
+  <button class="btn-delete" onclick="deleteBooking()" style="display:none;">Xóa booking</button>
+</div>
 
 </div>
 </div>
@@ -722,6 +732,7 @@ function selectDate(day, month, el){
   el.classList.add('active-date');
   selectedDate=new Date(2025, month-1, day);
   renderBookingSheet();
+  updateStats();
 }
 
 function getDateKey(date=selectedDate){
@@ -752,6 +763,9 @@ Object.entries(rooms).forEach(([room,times])=>{
   row.innerHTML=html;
   bookingTable.appendChild(row);
 });
+
+// Render lại booking sheet sau khi load
+renderBookingSheet();
 
 function timeToMinutes(time){
   let h=parseInt(time.split(':')[0]);
