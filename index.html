@@ -1,10 +1,295 @@
+```html
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Homestay Dashboard</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      background:#f5f5f5;
+      padding:20px;
+    }
+
+    h1{
+      margin-bottom:20px;
+      font-size:28px;
+    }
+
+    .room{
+      background:white;
+      border-radius:20px;
+      padding:20px;
+      margin-bottom:20px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      border-left:10px solid #ccc;
+    }
+
+    .danger{
+      border-left-color:#ff4d4f;
+      background:#fff1f0;
+    }
+
+    .safe{
+      border-left-color:#52c41a;
+    }
+
+    .room-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:15px;
+      gap:10px;
+    }
+
+    .room-name{
+      font-size:24px;
+      font-weight:bold;
+    }
+
+    .status{
+      padding:10px 14px;
+      border-radius:14px;
+      color:white;
+      font-weight:bold;
+      font-size:14px;
+    }
+
+    .status-danger{
+      background:#ff4d4f;
+    }
+
+    .status-safe{
+      background:#52c41a;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .card{
+      background:#fafafa;
+      padding:15px;
+      border-radius:16px;
+    }
+
+    .label{
+      color:#888;
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .value{
+      font-size:22px;
+      font-weight:bold;
+    }
+
+    .red{
+      color:#ff4d4f;
+    }
+
+    .green{
+      color:#52c41a;
+    }
+
+    .warning{
+      margin-top:16px;
+      background:#fff2e8;
+      padding:16px;
+      border-radius:16px;
+      border:2px solid #ffbb96;
+    }
+
+    .warning-title{
+      color:#d4380d;
+      font-weight:bold;
+      font-size:18px;
+      margin-bottom:8px;
+    }
+
+    button{
+      margin-top:12px;
+      width:100%;
+      border:none;
+      padding:14px;
+      border-radius:14px;
+      background:#52c41a;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+    }
+
+    .timeline{
+      margin-top:30px;
+      background:white;
+      padding:20px;
+      border-radius:20px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .timeline h2{
+      margin-bottom:20px;
+    }
+
+    .event{
+      padding:16px;
+      border-radius:16px;
+      margin-bottom:14px;
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+
+    .event-time{
+      font-size:24px;
+      font-weight:bold;
+    }
+
+    .event-red{
+      background:#fff1f0;
+    }
+
+    .event-orange{
+      background:#fff7e6;
+    }
+
+    .event-green{
+      background:#f6ffed;
+    }
+
+    @media(max-width:700px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .room-header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+    }
+  </style>
 </head>
-<body style="font-family:sans-serif;padding:40px;">
-  <h1>Homestay Dashboard đang hoạt động 🎉</h1>
-  <p>Web quản lý check-in/check-out cho homestay.</p>
+
+<body>
+
+  <h1>🏨 Homestay Dashboard</h1>
+
+  <div class="room danger">
+    <div class="room-header">
+      <div class="room-name">Midori</div>
+
+      <div class="status status-danger">
+        🚨 CẦN DỌN GẤP
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="label">Khách hiện tại</div>
+        <div class="value">Quỳnh</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Check-out</div>
+        <div class="value red">13:00</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Khách tiếp theo</div>
+        <div class="value">Tâm</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Check-in mới</div>
+        <div class="value red">13:30</div>
+      </div>
+    </div>
+
+    <div class="warning">
+      <div class="warning-title">
+        Còn 30 phút để dọn phòng
+      </div>
+
+      Ưu tiên phòng này trước khi khách mới check-in.
+
+      <button>✅ Đã dọn xong</button>
+    </div>
+  </div>
+
+  <div class="room safe">
+    <div class="room-header">
+      <div class="room-name">Truffle</div>
+
+      <div class="status status-safe">
+        ✅ Đã sẵn sàng
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="label">Khách hiện tại</div>
+        <div class="value">Minh</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Check-out</div>
+        <div class="value green">15:00</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Khách tiếp theo</div>
+        <div class="value">Chưa có</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Trạng thái</div>
+        <div class="value green">Phòng trống</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <h2>📅 Timeline hôm nay</h2>
+
+    <div class="event event-red">
+      <div class="event-time">13:00</div>
+
+      <div>
+        <strong>Midori check-out</strong><br>
+        Có khách mới lúc 13:30
+      </div>
+    </div>
+
+    <div class="event event-orange">
+      <div class="event-time">14:00</div>
+
+      <div>
+        <strong>Đang dọn Truffle</strong><br>
+        Còn 20 phút
+      </div>
+    </div>
+
+    <div class="event event-green">
+      <div class="event-time">15:00</div>
+
+      <div>
+        <strong>Porcini đã sẵn sàng</strong><br>
+        Có thể check-in
+      </div>
+    </div>
+
+  </div>
+
 </body>
 </html>
+```
