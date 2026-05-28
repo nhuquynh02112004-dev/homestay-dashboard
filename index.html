@@ -17,9 +17,9 @@
 }
 
 body{
-  background:#f5f2eb;
-  color:#2b2b2b;
+  background:#355b3e;
   padding:16px;
+  color:white;
 }
 
 .header{
@@ -27,12 +27,12 @@ body{
 }
 
 .title{
-  font-size:30px;
+  font-size:32px;
   font-weight:bold;
 }
 
 .subtitle{
-  color:#666;
+  opacity:0.8;
   margin-top:6px;
 }
 
@@ -45,30 +45,91 @@ body{
 
 .day{
   min-width:70px;
-  background:white;
-  border-radius:16px;
+  background:rgba(255,255,255,0.12);
+  border-radius:18px;
   padding:14px;
   text-align:center;
-  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  backdrop-filter:blur(10px);
 }
 
-.day.active{
-  background:#354f3f;
-  color:white;
+.active{
+  background:white;
+  color:#355b3e;
+  font-weight:bold;
 }
 
 .section{
   background:white;
+  color:#222;
   border-radius:24px;
   padding:18px;
   margin-bottom:20px;
-  box-shadow:0 4px 14px rgba(0,0,0,0.06);
 }
 
 .section-title{
   font-size:22px;
   font-weight:bold;
   margin-bottom:18px;
+}
+
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.event{
+  border-radius:18px;
+  padding:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.white{
+  background:#f5f5f5;
+}
+
+.yellow{
+  background:#fff3bf;
+}
+
+.red{
+  background:#ffc9c9;
+}
+
+.green{
+  background:#b2f2bb;
+}
+
+.left{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.time{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.room{
+  font-weight:bold;
+}
+
+.sub{
+  color:#666;
+  font-size:14px;
+}
+
+button{
+  border:none;
+  padding:12px 16px;
+  border-radius:14px;
+  background:#2b8a3e;
+  color:white;
+  font-weight:bold;
 }
 
 table{
@@ -78,91 +139,24 @@ table{
 
 th{
   text-align:left;
-  padding-bottom:12px;
+  padding-bottom:14px;
   color:#777;
-  font-size:14px;
 }
 
 td{
   padding:14px 0;
   border-top:1px solid #eee;
-  font-size:15px;
-}
-
-.room{
-  font-weight:bold;
 }
 
 .note{
-  color:#999;
+  color:#888;
   font-size:13px;
 }
 
-.timeline{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
-.event{
-  padding:16px;
-  border-radius:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
-
-.white{
-  background:white;
-  border:2px solid #eee;
-}
-
-.yellow{
-  background:#fff9db;
-}
-
-.red{
-  background:#ffe3e3;
-}
-
-.green{
-  background:#d3f9d8;
-}
-
-.event-left{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-
-.time{
-  font-size:24px;
-  font-weight:bold;
-}
-
-.event-title{
-  font-weight:bold;
-}
-
-.event-sub{
-  color:#666;
-  font-size:14px;
-}
-
-button{
-  border:none;
-  background:#2b8a3e;
-  color:white;
-  padding:12px 16px;
-  border-radius:14px;
-  font-weight:bold;
-}
-
 .add{
-  margin-top:16px;
+  margin-top:18px;
   display:grid;
-  gap:12px;
+  gap:10px;
 }
 
 input{
@@ -172,16 +166,16 @@ input{
 }
 
 .add-btn{
-  background:#354f3f;
+  background:#355b3e;
 }
 
 @media(min-width:900px){
 
-  .desktop{
-    display:grid;
-    grid-template-columns:1.1fr 0.9fr;
-    gap:20px;
-  }
+.wrapper{
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:20px;
+}
 
 }
 
@@ -198,22 +192,14 @@ input{
 </div>
 
 <div class="calendar">
-
   <div class="day">27</div>
-
-  <div class="day active">
-    28
-  </div>
-
+  <div class="day active">28</div>
   <div class="day">29</div>
-
   <div class="day">30</div>
-
   <div class="day">31</div>
-
 </div>
 
-<div class="desktop">
+<div class="wrapper">
 
 <div>
 
@@ -227,39 +213,128 @@ input{
 
 <tr>
 <th>Room</th>
-<th>Guest</th>
-<th>In</th>
-<th>Out</th>
+<th>Khung giờ</th>
+<th>Note</th>
 </tr>
 
 <tr>
-<td class="room">Midori</td>
-<td>
-Quỳnh
-<div class="note">birthday</div>
-</td>
-<td>13:00</td>
-<td>10:00</td>
+<td>Midori</td>
+<td>10:00 - 13:00</td>
+<td class="note">Ca 1</td>
 </tr>
 
 <tr>
-<td class="room">Truffle</td>
-<td>
-Minh
-<div class="note">extra bed</div>
-</td>
-<td>14:00</td>
-<td>11:00</td>
+<td>Midori</td>
+<td>13:30 - 16:30</td>
+<td class="note">Ca 2</td>
 </tr>
 
 <tr>
-<td class="room">Porcini</td>
-<td>
-Tâm
-<div class="note">late check-in</div>
-</td>
-<td>15:00</td>
-<td>12:00</td>
+<td>Midori</td>
+<td>17:00 - 20:00</td>
+<td class="note">Ca 3</td>
+</tr>
+
+<tr>
+<td>Midori</td>
+<td>20:30 - 09:30</td>
+<td class="note">Ca đêm</td>
+</tr>
+
+<tr>
+<td>Truffle</td>
+<td>10:30 - 13:30</td>
+<td class="note">Ca 1</td>
+</tr>
+
+<tr>
+<td>Truffle</td>
+<td>14:00 - 17:00</td>
+<td class="note">Ca 2</td>
+</tr>
+
+<tr>
+<td>Truffle</td>
+<td>17:30 - 20:30</td>
+<td class="note">Ca 3</td>
+</tr>
+
+<tr>
+<td>Truffle</td>
+<td>21:00 - 10:00</td>
+<td class="note">Ca đêm</td>
+</tr>
+
+<tr>
+<td>Matutake</td>
+<td>11:00 - 14:00</td>
+<td class="note">Ca 1</td>
+</tr>
+
+<tr>
+<td>Matutake</td>
+<td>14:30 - 17:30</td>
+<td class="note">Ca 2</td>
+</tr>
+
+<tr>
+<td>Matutake</td>
+<td>18:00 - 21:00</td>
+<td class="note">Ca 3</td>
+</tr>
+
+<tr>
+<td>Matutake</td>
+<td>21:30 - 10:30</td>
+<td class="note">Ca đêm</td>
+</tr>
+
+<tr>
+<td>Porcini</td>
+<td>11:30 - 14:30</td>
+<td class="note">Ca 1</td>
+</tr>
+
+<tr>
+<td>Porcini</td>
+<td>15:00 - 18:00</td>
+<td class="note">Ca 2</td>
+</tr>
+
+<tr>
+<td>Porcini</td>
+<td>18:30 - 21:30</td>
+<td class="note">Ca 3</td>
+</tr>
+
+<tr>
+<td>Porcini</td>
+<td>22:00 - 11:00</td>
+<td class="note">Ca đêm</td>
+</tr>
+
+<tr>
+<td>Shitake</td>
+<td>12:00 - 15:00</td>
+<td class="note">Ca 1</td>
+</tr>
+
+<tr>
+<td>Shitake</td>
+<td>15:30 - 18:30</td>
+<td class="note">Ca 2</td>
+</tr>
+
+<tr>
+<td>Shitake</td>
+<td>19:00 - 22:00</td>
+<td class="note">Ca 3</td>
+</tr>
+
+<tr>
+<td>Shitake</td>
+<td>22:30 - 11:30</td>
+<td class="note">Ca đêm</td>
 </tr>
 
 </table>
@@ -270,9 +345,9 @@ Tâm
 
 <input placeholder="Tên phòng"/>
 
-<input placeholder="Giờ check-in"/>
+<input placeholder="Check-in"/>
 
-<input placeholder="Giờ check-out"/>
+<input placeholder="Check-out"/>
 
 <input placeholder="Note"/>
 
@@ -298,12 +373,12 @@ Tâm
 
 <div class="event white">
 
-<div class="event-left">
+<div class="left">
 <div class="time">09:30</div>
-<div class="event-title">
+<div class="room">
 ⚪ Midori chưa tới giờ
 </div>
-<div class="event-sub">
+<div class="sub">
 Khách out lúc 10:00
 </div>
 </div>
@@ -312,57 +387,110 @@ Khách out lúc 10:00
 
 <div class="event yellow">
 
-<div class="event-left">
+<div class="left">
 <div class="time">09:45</div>
-<div class="event-title">
+<div class="room">
 🟡 Midori sắp cần dọn
 </div>
-<div class="event-sub">
+<div class="sub">
 Khách mới lúc 13:00
 </div>
 </div>
 
 </div>
 
-<div class="event red">
+<div class="event red" id="midori">
 
-<div class="event-left">
+<div class="left">
 <div class="time">10:00</div>
-<div class="event-title">
+<div class="room">
 🔴 Midori cần dọn
 </div>
-<div class="event-sub">
+<div class="sub">
 Ưu tiên phòng này
 </div>
 </div>
 
-<button>
+<button onclick="doneCleaning('midori', this)">
 Đã dọn xong
 </button>
 
 </div>
 
-<div class="event green">
+<div class="event white">
 
-<div class="event-left">
-<div class="time">10:20</div>
-<div class="event-title">
-🟢 Midori READY
+<div class="left">
+<div class="time">10:30</div>
+<div class="room">
+⚪ Truffle chưa tới giờ
 </div>
-<div class="event-sub">
-Sẵn sàng check-in
+<div class="sub">
+Khách out lúc 11:00
 </div>
-</div>
-
 </div>
 
 </div>
 
+<div class="event yellow">
+
+<div class="left">
+<div class="time">10:45</div>
+<div class="room">
+🟡 Truffle sắp cần dọn
+</div>
+<div class="sub">
+Khách mới lúc 14:00
+</div>
+</div>
+
+</div>
+
+<div class="event red" id="truffle">
+
+<div class="left">
+<div class="time">11:00</div>
+<div class="room">
+🔴 Truffle cần dọn
+</div>
+<div class="sub">
+Ưu tiên phòng này
+</div>
+</div>
+
+<button onclick="doneCleaning('truffle', this)">
+Đã dọn xong
+</button>
+
+</div>
+
 </div>
 
 </div>
 
 </div>
+
+</div>
+
+<script>
+
+function doneCleaning(id, btn){
+
+  const room = document.getElementById(id);
+
+  room.classList.remove('red');
+
+  room.classList.add('green');
+
+  room.querySelector('.room').innerHTML =
+  '🟢 Đã dọn xong';
+
+  btn.innerHTML = 'DONE';
+
+  btn.style.background = '#2f9e44';
+
+}
+
+</script>
 
 </body>
 </html>
