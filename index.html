@@ -1,4 +1,4 @@
-```html id="o0t80m"
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -132,8 +132,8 @@ transition:0.2s;
 }
 
 .slot.active{
-background:#d8f5d8;
-border:2px solid #69b96d;
+background:#fff3bf;
+border:2px solid #ffe066;
 }
 
 .slot:hover{
@@ -143,6 +143,7 @@ background:#ececec;
 .slot-time{
 font-weight:bold;
 font-size:15px;
+color:#222;
 }
 
 .slot-guest{
@@ -172,12 +173,19 @@ gap:14px;
 background:#f5f5f5;
 }
 
+.yellow{
+background:#fff3bf;
+border:2px solid #ffe066;
+}
+
 .red{
 background:#ffc9c9;
+border:2px solid #ff8787;
 }
 
 .green{
 background:#b2f2bb;
+border:2px solid #69db7c;
 }
 
 .time{
@@ -367,8 +375,9 @@ Shitake:[
 };
 
 let currentSlot=null;
-
 const bookings={};
+
+const calendar=document.getElementById('calendar');
 
 for(let i=28;i<=31;i++){
 
@@ -432,6 +441,15 @@ Trống
 
 });
 
+function timeToMinutes(time){
+
+let h=parseInt(time.split(':')[0]);
+let m=parseInt(time.split(':')[1]);
+
+return h*60+m;
+
+}
+
 function renderTimeline(){
 
 const timeline=
@@ -450,28 +468,45 @@ Object.entries(rooms).forEach(([room,times])=>{
 
 times.forEach((time,index)=>{
 
-const out=time[1];
-
-let outHour=parseInt(out.split(':')[0]);
-let outMinute=parseInt(out.split(':')[1]);
+const inTime=time[0];
+const outTime=time[1];
 
 const outMinutes=
-outHour*60+outMinute;
+timeToMinutes(outTime);
+
+const booking=
+bookings[`${room}-${index}`];
+
+let status='normal';
+let priority=3;
+
+if(
+currentMinutes>=outMinutes &&
+currentMinutes<outMinutes+60
+){
+
+status='red';
+priority=1;
+
+}
+
+else if(booking){
+
+status='yellow';
+priority=2;
+
+}
 
 items.push({
 
 room,
 index,
-out,
-next:index<3
-?times[index+1][0]
-:'-',
-
-status:
-currentMinutes>=outMinutes
-&& currentMinutes<outMinutes+60
-?'red'
-:'normal'
+inTime,
+outTime,
+booking,
+status,
+priority,
+sortTime:outMinutes
 
 });
 
@@ -481,22 +516,17 @@ currentMinutes>=outMinutes
 
 items.sort((a,b)=>{
 
-const aTime=
-parseInt(a.out.split(':')[0])*60+
-parseInt(a.out.split(':')[1]);
+if(a.priority!==b.priority){
 
-const bTime=
-parseInt(b.out.split(':')[0])*60+
-parseInt(b.out.split(':')[1]);
+return a.priority-b.priority;
 
-return aTime-bTime;
+}
+
+return a.sortTime-b.sortTime;
 
 });
 
-items.forEach((item,i)=>{
-
-const booking=
-bookings[`${item.room}-${item.index}`];
+items.forEach(item=>{
 
 timeline.innerHTML+=`
 
@@ -506,40 +536,60 @@ id="event-${item.room}-${item.index}">
 <div>
 
 <div class="time">
-OUT ${item.out}
+${item.inTime} - ${item.outTime}
 </div>
 
 <div class="event-title">
 ${item.room}
 </div>
 
+${item.booking
+?`
 <div class="sub">
-IN KHUNG SAU: ${item.next}
+👤 ${item.booking.name}
 </div>
-
-${booking
-?`<div class="sub">
-👤 ${booking.name}
-</div>`
+`
 :''
 }
 
-${booking
-?`<div class="sub">
+${item.booking
+?`
+<div class="sub">
 🚨 Có khách khung sau
-</div>`
+</div>
+`
 :''
 }
-
-</div>
-
-<div id="btn-${item.room}-${item.index}">
 
 ${item.status==='red'
-?`<button
+?`
+<div class="sub">
+🔴 CẦN DỌN
+</div>
+`
+:''
+}
+
+${item.status==='green'
+?`
+<div class="sub">
+🟢 READY
+</div>
+`
+:''
+}
+
+</div>
+
+<div>
+
+${item.status==='red'
+?`
+<button
 onclick="doneCleaning('${item.room}',${item.index})">
 Đã dọn xong
-</button>`
+</button>
+`
 :''
 }
 
@@ -619,6 +669,9 @@ document.getElementById(
 
 document.getElementById('popup')
 .style.display='none';
+
+document.getElementById('guestName').value='';
+document.getElementById('guestNote').value='';
 
 renderTimeline();
 
