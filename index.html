@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>🍄 Nấm Homestay</title>
@@ -10,221 +10,238 @@
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-  background:#355b3e;
-  color:white;
-  padding:16px;
+background:#A8CFA8;
+padding:16px;
+color:white;
 }
 
 .header{
-  margin-bottom:20px;
+margin-bottom:20px;
 }
 
 .title{
-  font-size:32px;
-  font-weight:bold;
+font-size:32px;
+font-weight:bold;
 }
 
 .subtitle{
-  opacity:0.8;
-  margin-top:6px;
+opacity:0.9;
+margin-top:6px;
 }
 
 .month{
-  font-size:20px;
-  margin-bottom:12px;
-  font-weight:bold;
+font-size:22px;
+font-weight:bold;
+margin-bottom:12px;
 }
 
 .calendar{
-  display:flex;
-  gap:10px;
-  overflow:auto;
-  margin-bottom:24px;
+display:flex;
+gap:10px;
+overflow:auto;
+margin-bottom:20px;
 }
 
 .day{
-  min-width:70px;
-  padding:14px;
-  border-radius:18px;
-  background:rgba(255,255,255,0.12);
-  text-align:center;
-  cursor:pointer;
+min-width:70px;
+padding:14px;
+border-radius:18px;
+background:rgba(255,255,255,0.2);
+text-align:center;
+cursor:pointer;
+font-weight:bold;
 }
 
 .day.active{
-  background:white;
-  color:#355b3e;
-  font-weight:bold;
+background:white;
+color:#4d6b4d;
 }
 
 .layout{
-  display:grid;
-  gap:20px;
+display:grid;
+gap:20px;
 }
 
 @media(min-width:1000px){
 
 .layout{
-  grid-template-columns:1.1fr 0.9fr;
+grid-template-columns:1.1fr 0.9fr;
 }
 
 }
 
 .section{
-  background:white;
-  color:#222;
-  border-radius:24px;
-  padding:18px;
+background:white;
+color:#222;
+border-radius:24px;
+padding:18px;
 }
 
 .section-title{
-  font-size:22px;
-  font-weight:bold;
-  margin-bottom:18px;
+font-size:22px;
+font-weight:bold;
+margin-bottom:18px;
 }
 
 .sheet{
-  overflow:auto;
+overflow:auto;
 }
 
 table{
-  width:100%;
-  border-collapse:collapse;
+width:100%;
+border-collapse:collapse;
 }
 
 th{
-  padding-bottom:14px;
-  text-align:left;
-  color:#777;
+padding-bottom:14px;
+text-align:center;
+color:#777;
 }
 
 td{
-  padding:16px 10px;
-  border-top:1px solid #eee;
-  text-align:center;
+padding:10px;
+border-top:1px solid #eee;
+text-align:center;
 }
 
 .room{
-  font-weight:bold;
-  text-align:left;
+font-weight:bold;
+text-align:left;
+min-width:120px;
 }
 
 .slot{
-  background:#f5f5f5;
-  border-radius:12px;
-  cursor:pointer;
-  min-width:120px;
+background:#f5f5f5;
+border-radius:14px;
+padding:10px;
+cursor:pointer;
+transition:0.2s;
+min-width:140px;
 }
 
 .slot:hover{
-  background:#e9ecef;
+background:#e9ecef;
 }
 
-.slot-name{
-  font-size:13px;
-  color:#888;
-  margin-top:6px;
+.slot-time{
+font-weight:bold;
+font-size:15px;
+color:#222;
+}
+
+.slot-note{
+font-size:12px;
+margin-top:6px;
+color:#666;
 }
 
 .timeline{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:80vh;
+overflow:auto;
 }
 
 .event{
-  border-radius:18px;
-  padding:16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
+padding:18px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:14px;
 }
 
 .white{
-  background:#f5f5f5;
+background:#f5f5f5;
 }
 
 .red{
-  background:#ffc9c9;
+background:#ffc9c9;
 }
 
 .green{
-  background:#b2f2bb;
+background:#b2f2bb;
 }
 
 .left{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
+display:flex;
+flex-direction:column;
+gap:6px;
 }
 
 .time{
-  font-size:22px;
-  font-weight:bold;
+font-size:22px;
+font-weight:bold;
+color:#222;
 }
 
 .event-title{
-  font-weight:bold;
+font-size:20px;
+font-weight:bold;
+color:#222;
 }
 
 .sub{
-  font-size:14px;
-  color:#666;
+font-size:14px;
+font-weight:500;
+color:#333;
 }
 
 button{
-  border:none;
-  padding:12px 16px;
-  border-radius:14px;
-  background:#2b8a3e;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+border:none;
+padding:12px 16px;
+border-radius:14px;
+background:#2b8a3e;
+color:white;
+font-weight:bold;
+cursor:pointer;
 }
 
 .popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.5);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.5);
+display:none;
+justify-content:center;
+align-items:center;
+padding:20px;
+z-index:999;
 }
 
 .popup-box{
-  background:white;
-  color:black;
-  width:100%;
-  max-width:400px;
-  border-radius:24px;
-  padding:20px;
+background:white;
+color:black;
+width:100%;
+max-width:420px;
+border-radius:24px;
+padding:20px;
 }
 
 .popup-title{
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:14px;
+font-size:22px;
+font-weight:bold;
+margin-bottom:14px;
 }
 
-input, textarea{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid #ddd;
-  margin-bottom:12px;
+input,textarea{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid #ddd;
+margin-bottom:12px;
+font-size:15px;
 }
 
 .save-btn{
-  width:100%;
+width:100%;
 }
 
 </style>
@@ -233,28 +250,32 @@ input, textarea{
 <body>
 
 <div class="header">
-  <div class="title">🍄 Nấm Homestay</div>
-  <div class="subtitle">
-    Operation Dashboard
-  </div>
+
+<div class="title">
+🍄 Nấm Homestay
+</div>
+
+<div class="subtitle">
+Operation Dashboard
+</div>
+
 </div>
 
 <div class="month">
-May 2025
+May / June 2025
 </div>
 
 <div class="calendar">
 
-<div class="day">27</div>
-<div class="day active">28</div>
-<div class="day">29</div>
-<div class="day">30</div>
-<div class="day">31</div>
+<div class="day active" onclick="selectDay(this)">28/5</div>
+<div class="day" onclick="selectDay(this)">29/5</div>
+<div class="day" onclick="selectDay(this)">30/5</div>
+<div class="day" onclick="selectDay(this)">31/5</div>
 
-<div class="day">1/6</div>
-<div class="day">2/6</div>
-<div class="day">3/6</div>
-<div class="day">4/6</div>
+<div class="day" onclick="selectDay(this)">1/6</div>
+<div class="day" onclick="selectDay(this)">2/6</div>
+<div class="day" onclick="selectDay(this)">3/6</div>
+<div class="day" onclick="selectDay(this)">4/6</div>
 
 </div>
 
@@ -278,103 +299,81 @@ May 2025
 <th>Đêm</th>
 </tr>
 
+<script>
+
+const rooms = {
+
+Midori:[
+"10:00 - 13:00",
+"13:30 - 16:30",
+"17:00 - 20:00",
+"20:30 - 09:30"
+],
+
+Truffle:[
+"10:30 - 13:30",
+"14:00 - 17:00",
+"17:30 - 20:30",
+"21:00 - 10:00"
+],
+
+Matutake:[
+"11:00 - 14:00",
+"14:30 - 17:30",
+"18:00 - 21:00",
+"21:30 - 10:30"
+],
+
+Porcini:[
+"11:30 - 14:30",
+"15:00 - 18:00",
+"18:30 - 21:30",
+"22:00 - 11:00"
+],
+
+Shitake:[
+"12:00 - 15:00",
+"15:30 - 18:30",
+"19:00 - 22:00",
+"22:30 - 11:30"
+]
+
+};
+
+document.write(
+Object.entries(rooms).map(([room,times])=>`
+
 <tr>
 
-<td class="room">Midori</td>
+<td class="room">${room}</td>
+
+${times.map((time,index)=>`
 
 <td>
-<div class="slot" onclick="openPopup('Midori - Ca 1')">
-10:00 - 13:00
-<div class="slot-name">
-Tap để note
+
+<div class="slot"
+onclick="openPopup('${room} - Ca ${index+1}')">
+
+<div class="slot-time">
+${time}
 </div>
+
+<div class="slot-note">
+Tap để thêm khách
 </div>
+
+</div>
+
 </td>
 
-<td>
-<div class="slot" onclick="openPopup('Midori - Ca 2')">
-13:30 - 16:30
-<div class="slot-name">
-Tap để note
-</div>
-</div>
-</td>
-
-<td>
-<div class="slot" onclick="openPopup('Midori - Ca 3')">
-17:00 - 20:00
-<div class="slot-name">
-Tap để note
-</div>
-</div>
-</td>
-
-<td>
-<div class="slot" onclick="openPopup('Midori - Đêm')">
-20:30 - 09:30
-<div class="slot-name">
-Tap để note
-</div>
-</div>
-</td>
+`).join('')}
 
 </tr>
 
-<tr>
+`).join('')
+);
 
-<td class="room">Truffle</td>
-
-<td><div class="slot" onclick="openPopup('Truffle - Ca 1')">10:30 - 13:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Truffle - Ca 2')">14:00 - 17:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Truffle - Ca 3')">17:30 - 20:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Truffle - Đêm')">21:00 - 10:00</div></td>
-
-</tr>
-
-<tr>
-
-<td class="room">Matutake</td>
-
-<td><div class="slot" onclick="openPopup('Matutake - Ca 1')">11:00 - 14:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Matutake - Ca 2')">14:30 - 17:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Matutake - Ca 3')">18:00 - 21:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Matutake - Đêm')">21:30 - 10:30</div></td>
-
-</tr>
-
-<tr>
-
-<td class="room">Porcini</td>
-
-<td><div class="slot" onclick="openPopup('Porcini - Ca 1')">11:30 - 14:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Porcini - Ca 2')">15:00 - 18:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Porcini - Ca 3')">18:30 - 21:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Porcini - Đêm')">22:00 - 11:00</div></td>
-
-</tr>
-
-<tr>
-
-<td class="room">Shitake</td>
-
-<td><div class="slot" onclick="openPopup('Shitake - Ca 1')">12:00 - 15:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Shitake - Ca 2')">15:30 - 18:30</div></td>
-
-<td><div class="slot" onclick="openPopup('Shitake - Ca 3')">19:00 - 22:00</div></td>
-
-<td><div class="slot" onclick="openPopup('Shitake - Đêm')">22:30 - 11:30</div></td>
-
-</tr>
+</script>
 
 </table>
 
@@ -390,57 +389,79 @@ Tap để note
 
 <div class="timeline" id="timeline">
 
-<div class="event red" id="midori">
+<script>
+
+const timelineData = [
+
+["10:00","Midori","13:00","13:30"],
+["10:30","Truffle","13:30","14:00"],
+["11:00","Matutake","14:00","14:30"],
+["11:30","Porcini","14:30","15:00"],
+["12:00","Shitake","15:00","15:30"],
+
+["13:30","Midori","16:30","17:00"],
+["14:00","Truffle","17:00","17:30"],
+["14:30","Matutake","17:30","18:00"],
+["15:00","Porcini","18:00","18:30"],
+["15:30","Shitake","18:30","19:00"],
+
+["17:00","Midori","20:00","20:30"],
+["17:30","Truffle","20:30","21:00"],
+["18:00","Matutake","21:00","21:30"],
+["18:30","Porcini","21:30","22:00"],
+["19:00","Shitake","22:00","22:30"],
+
+["20:30","Midori","09:30","-"],
+["21:00","Truffle","10:00","-"],
+["21:30","Matutake","10:30","-"],
+["22:00","Porcini","11:00","-"],
+["22:30","Shitake","11:30","-"]
+
+];
+
+document.write(
+
+timelineData.map((item,index)=>`
+
+<div class="event white"
+id="room${index}">
 
 <div class="left">
-<div class="time">13:00</div>
+
+<div class="time">
+${item[0]}
+</div>
 
 <div class="event-title">
-🔴 Midori cần dọn
+${item[1]}
 </div>
 
 <div class="sub">
-🚨 Có khách khung sau 13:30
-</div>
+OUT: ${item[2]}
 </div>
 
-<button onclick="doneCleaning('midori', this)">
+<div class="sub">
+IN KHUNG SAU: ${item[3]}
+</div>
+
+<div class="sub">
+🚨 Có khách khung sau
+</div>
+
+</div>
+
+<button
+onclick="doneCleaning('room${index}',this)">
 Đã dọn xong
 </button>
 
 </div>
 
-<div class="event white">
+`).join('')
 
-<div class="left">
-<div class="time">14:00</div>
+);
 
-<div class="event-title">
-⚪ Truffle chưa tới giờ
-</div>
-
-<div class="sub">
-Out lúc 14:00
-</div>
-</div>
-
-</div>
-
-<div class="event white">
-
-<div class="left">
-<div class="time">15:00</div>
-
-<div class="event-title">
-⚪ Matutake chưa tới giờ
-</div>
-
-<div class="sub">
-Out lúc 15:00
-</div>
-</div>
-
-</div>
+</script>
 
 </div>
 
@@ -460,7 +481,8 @@ Booking
 
 <textarea placeholder="Ghi chú khách"></textarea>
 
-<button class="save-btn" onclick="closePopup()">
+<button class="save-btn"
+onclick="closePopup()">
 Lưu
 </button>
 
@@ -470,34 +492,47 @@ Lưu
 
 <script>
 
+function selectDay(el){
+
+document.querySelectorAll('.day')
+.forEach(d=>d.classList.remove('active'));
+
+el.classList.add('active');
+
+}
+
 function openPopup(title){
 
-document.getElementById('popup').style.display='flex';
+document.getElementById('popup')
+.style.display='flex';
 
-document.getElementById('popupTitle').innerHTML=title;
+document.getElementById('popupTitle')
+.innerHTML=title;
 
 }
 
 function closePopup(){
 
-document.getElementById('popup').style.display='none';
+document.getElementById('popup')
+.style.display='none';
 
 }
 
-function doneCleaning(id, btn){
+function doneCleaning(id,btn){
 
 const item=document.getElementById(id);
 
-item.classList.remove('red');
+item.classList.remove('white');
 
 item.classList.add('green');
 
-item.querySelector('.event-title').innerHTML=
-'🟢 Đã dọn xong';
+item.querySelector('.event-title')
+.innerHTML+=' ✅';
 
 btn.innerHTML='DONE';
 
-document.getElementById('timeline').appendChild(item);
+document.getElementById('timeline')
+.appendChild(item);
 
 }
 
