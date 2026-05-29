@@ -278,15 +278,6 @@ box-shadow:0 2px 8px rgba(0, 0, 0, 0.05);
 order:3;
 }
 
-.timeline{
-display:flex;
-flex-direction:column;
-gap:10px;
-max-height:70vh;
-overflow-y:auto;
--webkit-overflow-scrolling:touch;
-}
-
 .event-content{
 flex:1;
 }
@@ -658,7 +649,6 @@ const months=[
 
 let currentMonth=new Date().getMonth()+1;
 
-// Load dữ liệu từ localStorage
 function loadData(){
   const saved=localStorage.getItem('bookings');
   const cleanedSaved=localStorage.getItem('cleanedSlots');
@@ -678,19 +668,27 @@ function loadData(){
   }
 }
 
-// Lưu dữ liệu vào localStorage
 function saveData(){
   localStorage.setItem('bookings', JSON.stringify(bookings));
   localStorage.setItem('cleanedSlots', JSON.stringify(cleanedSlots));
 }
 
-// Khởi tạo
 loadData();
 renderMonthSelector();
 renderCalendar(currentMonth);
 renderBookingSheet();
 renderTimeline();
 updateStats();
+
+// Auto-update Booking Sheet mỗi phút
+setInterval(()=>{
+  renderBookingSheet();
+}, 60000);
+
+// Auto-update Timeline mỗi phút
+setInterval(()=>{
+  renderTimeline();
+}, 60000);
 
 function renderMonthSelector(){
   const selector=document.getElementById('monthSelector');
@@ -768,13 +766,65 @@ Object.entries(rooms).forEach(([room,times])=>{
   bookingTable.appendChild(row);
 });
 
-// Render lại booking sheet sau khi load
 renderBookingSheet();
 
 function timeToMinutes(time){
   let h=parseInt(time.split(':')[0]);
   let m=parseInt(time.split(':')[1]);
   return h*60+m;
+}
+
+function getSlotStatus(room, index, booking){
+  if(!booking) return 'empty'; // Trống
+  
+  const dateKey=getDateKey();
+  const bookingKey=`${dateKey}-${room}-${index}`;
+  const times=rooms[room];
+  const time=times[index];
+  const inTime=time[0];
+  const inMinutes=timeToMinutes(inTime);
+  
+  const now=new Date();
+  const currentMinutes=now.getHours()*60+now.getMinutes();
+  
+  // Nếu chưa tới giờ check-in, hiển thị vàng (chờ check-in)
+  if(currentMinutes<inMinutes){
+    return 'booked'; // Vàng
+  }
+  
+  // Nếu đã tới giờ check-in, hiển thị xanh (đã check-in)
+  if(currentMinutes>=inMinutes){
+    return 'checkedin'; // Xanh
+  }
+}
+
+function renderBookingSheet(){
+  const dateKey=getDateKey();
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const slot=document.getElementById(`${room}-${index}`);
+      const guestEl=document.getElementById(`${room}-${index}-guest`);
+      
+      if(slot){
+        slot.className='slot';
+        
+        const bookingKey=`${dateKey}-${room}-${index}`;
+        const booking=bookings[bookingKey];
+        const status=getSlotStatus(room, index, booking);
+        
+        if(status==='empty'){
+          guestEl.textContent='Trống';
+        }else if(status==='booked'){
+          slot.classList.add('booked');
+          guestEl.textContent=booking.name;
+        }else if(status==='checkedin'){
+          slot.classList.add('checkedin');
+          guestEl.textContent=booking.name + ' ✓';
+        }
+      }
+    });
+  });
 }
 
 function renderTimeline(){
@@ -807,11 +857,9 @@ function renderTimeline(){
         let sortTime=inMinutes;
         
         if(isCleaned){
-          // Đã dọn xong
           status='white';
           priority=3;
         }else if(currentMinutes>=outMinutes){
-          // Cần dọn ngay
           status='red';
           priority=1;
           sortTime=outMinutes;
@@ -834,8 +882,6 @@ function renderTimeline(){
     });
   });
   
-  // Sắp xếp: Đỏ (priority 1) -> Vàng (priority 2) -> Trắng (priority 3)
-  // Trong cùng priority, sắp xếp theo thời gian
   items.sort((a,b)=>{
     if(a.priority!==b.priority) return a.priority-b.priority;
     return a.sortTime-b.sortTime;
@@ -884,34 +930,8 @@ function renderTimeline(){
   });
 }
 
-function renderBookingSheet(){
-  const dateKey=getDateKey();
-  
-  Object.entries(rooms).forEach(([room,times])=>{
-    times.forEach((time,index)=>{
-      const slot=document.getElementById(`${room}-${index}`);
-      const guestEl=document.getElementById(`${room}-${index}-guest`);
-      
-      if(slot){
-        slot.className='slot';
-        
-        const bookingKey=`${dateKey}-${room}-${index}`;
-        const booking=bookings[bookingKey];
-        
-        if(booking){
-          if(booking.checkedIn){
-            slot.classList.add('checkedin');
-            guestEl.textContent=booking.name + ' ✓';
-          }else{
-            slot.classList.add('booked');
-            guestEl.textContent=booking.name;
-          }
-        }else{
-          guestEl.textContent='Trống';
-        }
-      }
-    });
-  });
+function renderBookingSheetOnly(){
+  renderBookingSheet();
 }
 
 function updateStats(){
@@ -926,10 +946,12 @@ function updateStats(){
     times.forEach((time,index)=>{
       const bookingKey=`${dateKey}-${room}-${index}`;
       const booking=bookings[bookingKey];
+      const status=getSlotStatus(room, index, booking);
       
-      if(booking){
+      if(status==='booked'){
         booked++;
-        if(booking.checkedIn) checked++;
+      }else if(status==='checkedin'){
+        checked++;
       }else{
         empty++;
       }
@@ -957,7 +979,7 @@ function doneCleaning(room,index){
   const bookingKey=`${dateKey}-${room}-${index}`;
   cleanedSlots[bookingKey]=true;
   saveData();
-  renderTimeline();
+  renderTimeline(); // Cập nhật timeline ngay tức thì
 }
 
 function openPopup(room,index){
@@ -1040,13 +1062,14 @@ function exportToExcel(){
     times.forEach((time,index)=>{
       const bookingKey=`${dateKey}-${room}-${index}`;
       const booking=bookings[bookingKey];
+      const status=getSlotStatus(room, index, booking);
       
       const caNum=index+1;
-      const status=booking ? (booking.checkedIn ? 'Checked-in' : 'Booked') : 'Trống';
+      const statusText=status==='booked'?'Booked':status==='checkedin'?'Checked-in':'Trống';
       const guestName=booking ? booking.name : '-';
       const guestNote=booking ? (booking.note || '-') : '-';
       
-      csvContent+=`${room},Ca ${caNum},${time[0]}-${time[1]},${guestName},"${guestNote}",${status}\n`;
+      csvContent+=`${room},Ca ${caNum},${time[0]}-${time[1]},${guestName},"${guestNote}",${statusText}\n`;
     });
   });
   
@@ -1062,11 +1085,6 @@ function exportToExcel(){
   link.click();
   document.body.removeChild(link);
 }
-
-// Update timeline mỗi phút
-setInterval(()=>{
-  renderTimeline();
-}, 60000);
 
 </script>
 
