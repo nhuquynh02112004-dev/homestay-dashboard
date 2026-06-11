@@ -556,6 +556,96 @@ transform:translateY(-2px);
 box-shadow:0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
+.notification-container{
+position:fixed;
+top:20px;
+right:20px;
+z-index:10000;
+max-width:400px;
+}
+
+.notification{
+background:white;
+border-radius:12px;
+padding:16px;
+margin-bottom:10px;
+box-shadow:0 4px 20px rgba(0,0,0,0.2);
+animation:slideInRight 0.4s ease;
+display:flex;
+gap:12px;
+align-items:flex-start;
+}
+
+@keyframes slideInRight{
+from{
+  transform:translateX(400px);
+  opacity:0;
+}
+to{
+  transform:translateX(0);
+  opacity:1;
+}
+}
+
+@keyframes slideOutRight{
+from{
+  transform:translateX(0);
+  opacity:1;
+}
+to{
+  transform:translateX(400px);
+  opacity:0;
+}
+}
+
+.notification.remove{
+animation:slideOutRight 0.4s ease forwards;
+}
+
+.notification-icon{
+font-size:24px;
+min-width:30px;
+}
+
+.notification-content{
+flex:1;
+}
+
+.notification-title{
+font-weight:700;
+color:#333;
+font-size:14px;
+font-family:'Poppins', sans-serif;
+}
+
+.notification-message{
+font-size:12px;
+color:#666;
+margin-top:4px;
+}
+
+.notification-close{
+background:none;
+border:none;
+color:#999;
+cursor:pointer;
+padding:0;
+font-size:20px;
+margin:0;
+}
+
+.notification-close:hover{
+color:#333;
+}
+
+.notification.checkin{
+border-left:4px solid #4CAF50;
+}
+
+.notification.checkout{
+border-left:4px solid #F44336;
+}
+
 @media(max-width:480px){
 .title{
 font-size:32px;
@@ -582,6 +672,25 @@ font-size:14px;
 button{
 font-size:11px;
 padding:6px 10px;
+}
+
+.notification-container{
+top:10px;
+right:10px;
+max-width:300px;
+}
+
+.notification{
+padding:12px;
+font-size:12px;
+}
+
+.notification-title{
+font-size:12px;
+}
+
+.notification-message{
+font-size:11px;
 }
 }
 
@@ -637,6 +746,8 @@ padding:6px 10px;
 </div>
 
 </div>
+
+<div class="notification-container" id="notificationContainer"></div>
 
 <div class="popup" id="popup">
 <div class="popup-box">
@@ -702,6 +813,8 @@ let currentSlot=null;
 let selectedDate=new Date();
 let cleanedSlots={};
 let selectedBookingType='app';
+let notifiedCheckIns=new Set();
+let notifiedCheckOuts=new Set();
 
 const months=[
 { name:'May', month:5, days:31 },
@@ -746,6 +859,14 @@ renderCalendar(currentMonth);
 renderBookingSheet();
 renderTimeline();
 updateStats();
+
+// Kiểm tra thông báo mỗi phút
+setInterval(()=>{
+  checkNotifications();
+}, 60000);
+
+// Kiểm tra thông báo lúc load
+checkNotifications();
 
 setInterval(()=>{
   renderBookingSheet();
@@ -859,6 +980,88 @@ function getSlotStatus(room, index, booking){
   if(currentMinutes>=inMinutes){
     return 'checkedin';
   }
+}
+
+function checkNotifications(){
+  const now=new Date();
+  const currentMinutes=now.getHours()*60+now.getMinutes();
+  const today=getDateKey();
+  
+  Object.entries(rooms).forEach(([room,times])=>{
+    times.forEach((time,index)=>{
+      const bookingKey=`${today}-${room}-${index}`;
+      const booking=bookings[bookingKey];
+      
+      if(booking){
+        const inTime=time[0];
+        const outTime=time[1];
+        const inMinutes=timeToMinutes(inTime);
+        const outMinutes=timeToMinutes(outTime);
+        
+        // Thông báo check-in 15 phút trước
+        const checkInNotifyKey=`${bookingKey}-checkin`;
+        if(currentMinutes===inMinutes-15 && !notifiedCheckIns.has(checkInNotifyKey)){
+          showNotification('🟢 Sắp check-in', `${room} lúc ${inTime}`, 'checkin');
+          notifiedCheckIns.add(checkInNotifyKey);
+        }
+        
+        // Thông báo check-out (khi tới giờ)
+        const checkOutNotifyKey=`${bookingKey}-checkout`;
+        if(currentMinutes===outMinutes && !notifiedCheckOuts.has(checkOutNotifyKey)){
+          showNotification('🔴 Cần dọn ngay', `${room} ${inTime}-${outTime}`, 'checkout');
+          notifiedCheckOuts.add(checkOutNotifyKey);
+        }
+      }
+    });
+  });
+}
+
+function showNotification(title, message, type){
+  const container=document.getElementById('notificationContainer');
+  
+  const notification=document.createElement('div');
+  notification.className=`notification ${type}`;
+  notification.innerHTML=`
+    <div class="notification-icon">${type==='checkin' ? '🟢' : '🔴'}</div>
+    <div class="notification-content">
+      <div class="notification-title">${title}</div>
+      <div class="notification-message">${message}</div>
+    </div>
+    <button class="notification-close" onclick="this.parentElement.classList.add('remove'); setTimeout(()=>this.parentElement.remove(), 400)">✕</button>
+  `;
+  
+  container.appendChild(notification);
+  
+  // Phát âm thanh
+  playNotificationSound();
+  
+  // Tự động xóa sau 8 giây
+  setTimeout(()=>{
+    if(notification.parentElement){
+      notification.classList.add('remove');
+      setTimeout(()=>notification.remove(), 400);
+    }
+  }, 8000);
+}
+
+function playNotificationSound(){
+  const audioContext=new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Tạo tiếng beep
+  const oscillator=audioContext.createOscillator();
+  const gainNode=audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  oscillator.frequency.value=800;
+  oscillator.type='sine';
+  
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime+0.5);
+  
+  oscillator.start(audioContext.currentTime);
+  oscillator.stop(audioContext.currentTime+0.5);
 }
 
 function renderBookingSheet(){
