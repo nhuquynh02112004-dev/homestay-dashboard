@@ -502,12 +502,12 @@ margin-top:16px;
 
 .btn-save{
 background:linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%);
-grid-column:1 / -1;
 }
 
 .btn-delete{
 background:#E57373;
 margin:0 !important;
+padding:8px 12px !important;
 }
 
 .btn-delete:hover{
@@ -583,14 +583,6 @@ button{
 font-size:11px;
 padding:6px 10px;
 }
-
-.button-group{
-grid-template-columns:1fr;
-}
-
-.btn-delete{
-grid-column:1 / -1;
-}
 }
 
 </style>
@@ -664,7 +656,7 @@ grid-column:1 / -1;
 
 <div class="button-group">
   <button class="btn-save" onclick="saveBooking()">Lưu booking</button>
-  <button class="btn-delete" onclick="deleteBooking()" style="display:none;">Xóa booking</button>
+  <button class="btn-delete" onclick="deleteBooking()" style="display:none;">Xóa</button>
 </div>
 
 </div>
