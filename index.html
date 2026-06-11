@@ -209,32 +209,51 @@ background:#E0F2F1;
 border-color:#2E7D32;
 }
 
-.slot.booked{
-background:linear-gradient(135deg, #FFF9C4 0%, #FFEE58 100%);
-border:2px solid #FDD835;
-box-shadow:0 2px 8px rgba(253, 216, 53, 0.3);
+.slot.booked-app{
+background:linear-gradient(135deg, #FFE0B2 0%, #FFD54F 100%);
+border:2px solid #FFA726;
+box-shadow:0 2px 8px rgba(255, 167, 38, 0.3);
 }
 
-.slot.checkedin{
-background:linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 100%);
-border:2px solid #66BB6A;
-box-shadow:0 2px 8px rgba(102, 187, 106, 0.3);
+.slot.booked-msg{
+background:linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+border:2px solid #E57373;
+box-shadow:0 2px 8px rgba(229, 115, 115, 0.3);
+}
+
+.slot.checkedin-app{
+background:linear-gradient(135deg, #FFE0B2 0%, #FFD54F 100%);
+border:2px solid #FFA726;
+box-shadow:0 2px 8px rgba(255, 167, 38, 0.3);
+}
+
+.slot.checkedin-msg{
+background:linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+border:2px solid #E57373;
+box-shadow:0 2px 8px rgba(229, 115, 115, 0.3);
+}
+
+.slot.checkedin-app::after,
+.slot.checkedin-msg::after{
+content:' ✓';
+font-weight:bold;
 }
 
 .slot-time{
 font-weight:700;
 font-size:12px;
-color:#2E7D32;
+color:#333;
 font-family:'Poppins', sans-serif;
 }
 
 .slot-guest{
 margin-top:4px;
 font-size:11px;
-color:#666;
+color:#333;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
+font-weight:600;
 }
 
 .timeline{
@@ -425,6 +444,42 @@ box-shadow:0 0 0 3px rgba(46, 125, 50, 0.1);
 background:#FFFBFE;
 }
 
+.booking-type-selector{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:12px;
+}
+
+.type-btn{
+padding:12px;
+border:2px solid #DDD;
+background:white;
+color:#333;
+border-radius:10px;
+font-weight:600;
+cursor:pointer;
+transition:all 0.3s ease;
+font-family:'Quicksand', sans-serif;
+}
+
+.type-btn:hover{
+border-color:#2E7D32;
+background:#F1F8F6;
+}
+
+.type-btn.active-app{
+background:linear-gradient(135deg, #FFE0B2 0%, #FFD54F 100%);
+border-color:#FFA726;
+color:#333;
+}
+
+.type-btn.active-msg{
+background:linear-gradient(135deg, #FFCDD2 0%, #EF9A9A 100%);
+border-color:#E57373;
+color:#333;
+}
+
 .button-group{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -585,6 +640,11 @@ grid-column:1 / -1;
   <button class="btn-close" onclick="closePopup()">✕</button>
 </div>
 
+<div class="booking-type-selector">
+  <button class="type-btn" id="btnApp" onclick="selectBookingType('app')">📱 App</button>
+  <button class="type-btn" id="btnMsg" onclick="selectBookingType('msg')">💬 Tin nhắn</button>
+</div>
+
 <input id="guestName" placeholder="Tên khách"/>
 <textarea id="guestNote" placeholder="Ghi chú" rows="3"></textarea>
 
@@ -635,6 +695,7 @@ let bookings={};
 let currentSlot=null;
 let selectedDate=new Date();
 let cleanedSlots={};
+let selectedBookingType='app';
 
 const months=[
 { name:'May', month:5, days:31 },
@@ -680,12 +741,10 @@ renderBookingSheet();
 renderTimeline();
 updateStats();
 
-// Auto-update Booking Sheet mỗi phút
 setInterval(()=>{
   renderBookingSheet();
 }, 60000);
 
-// Auto-update Timeline mỗi phút
 setInterval(()=>{
   renderTimeline();
 }, 60000);
@@ -775,7 +834,7 @@ function timeToMinutes(time){
 }
 
 function getSlotStatus(room, index, booking){
-  if(!booking) return 'empty'; // Trống
+  if(!booking) return 'empty';
   
   const dateKey=getDateKey();
   const bookingKey=`${dateKey}-${room}-${index}`;
@@ -787,14 +846,12 @@ function getSlotStatus(room, index, booking){
   const now=new Date();
   const currentMinutes=now.getHours()*60+now.getMinutes();
   
-  // Nếu chưa tới giờ check-in, hiển thị vàng (chờ check-in)
   if(currentMinutes<inMinutes){
-    return 'booked'; // Vàng
+    return 'booked';
   }
   
-  // Nếu đã tới giờ check-in, hiển thị xanh (đã check-in)
   if(currentMinutes>=inMinutes){
-    return 'checkedin'; // Xanh
+    return 'checkedin';
   }
 }
 
@@ -812,15 +869,24 @@ function renderBookingSheet(){
         const bookingKey=`${dateKey}-${room}-${index}`;
         const booking=bookings[bookingKey];
         const status=getSlotStatus(room, index, booking);
+        const bookingType=booking ? booking.type : null;
         
         if(status==='empty'){
           guestEl.textContent='Trống';
         }else if(status==='booked'){
-          slot.classList.add('booked');
+          if(bookingType==='app'){
+            slot.classList.add('booked-app');
+          }else if(bookingType==='msg'){
+            slot.classList.add('booked-msg');
+          }
           guestEl.textContent=booking.name;
         }else if(status==='checkedin'){
-          slot.classList.add('checkedin');
-          guestEl.textContent=booking.name + ' ✓';
+          if(bookingType==='app'){
+            slot.classList.add('checkedin-app');
+          }else if(bookingType==='msg'){
+            slot.classList.add('checkedin-msg');
+          }
+          guestEl.textContent=booking.name;
         }
       }
     });
@@ -930,10 +996,6 @@ function renderTimeline(){
   });
 }
 
-function renderBookingSheetOnly(){
-  renderBookingSheet();
-}
-
 function updateStats(){
   const dateKey=getDateKey();
   const stats=document.getElementById('stats');
@@ -979,11 +1041,25 @@ function doneCleaning(room,index){
   const bookingKey=`${dateKey}-${room}-${index}`;
   cleanedSlots[bookingKey]=true;
   saveData();
-  renderTimeline(); // Cập nhật timeline ngay tức thì
+  renderTimeline();
+}
+
+function selectBookingType(type){
+  selectedBookingType=type;
+  
+  document.getElementById('btnApp').classList.remove('active-app');
+  document.getElementById('btnMsg').classList.remove('active-msg');
+  
+  if(type==='app'){
+    document.getElementById('btnApp').classList.add('active-app');
+  }else if(type==='msg'){
+    document.getElementById('btnMsg').classList.add('active-msg');
+  }
 }
 
 function openPopup(room,index){
   currentSlot={room,index};
+  selectedBookingType='app'; // Reset default
   
   const dateKey=getDateKey();
   const bookingKey=`${dateKey}-${room}-${index}`;
@@ -992,14 +1068,26 @@ function openPopup(room,index){
   document.getElementById('popup').style.display='flex';
   document.getElementById('popupTitle').innerHTML=`${room} - Ca ${index+1}`;
   
+  // Reset button styles
+  document.getElementById('btnApp').classList.remove('active-app');
+  document.getElementById('btnMsg').classList.remove('active-msg');
+  
   if(booking){
     document.getElementById('guestName').value=booking.name;
     document.getElementById('guestNote').value=booking.note||'';
     document.querySelector('.btn-delete').style.display='block';
+    
+    // Set booking type nếu có
+    if(booking.type==='app'){
+      selectBookingType('app');
+    }else if(booking.type==='msg'){
+      selectBookingType('msg');
+    }
   }else{
     document.getElementById('guestName').value='';
     document.getElementById('guestNote').value='';
     document.querySelector('.btn-delete').style.display='none';
+    selectBookingType('app');
   }
 }
 
@@ -1022,6 +1110,7 @@ function saveBooking(){
   bookings[bookingKey]={
     name,
     note,
+    type:selectedBookingType,
     checkedIn:false,
     cleaned:false,
     createdAt:new Date().toISOString()
@@ -1056,7 +1145,7 @@ function exportToExcel(){
   let csvContent='Nấm Homestay - Báo cáo booking\n';
   csvContent+=`Ngày: ${dateStr}\n\n`;
   
-  csvContent+='Phòng,Ca,Giờ,Tên khách,Ghi chú,Trạng thái\n';
+  csvContent+='Phòng,Ca,Giờ,Tên khách,Ghi chú,Loại,Trạng thái\n';
   
   Object.entries(rooms).forEach(([room,times])=>{
     times.forEach((time,index)=>{
@@ -1068,8 +1157,9 @@ function exportToExcel(){
       const statusText=status==='booked'?'Booked':status==='checkedin'?'Checked-in':'Trống';
       const guestName=booking ? booking.name : '-';
       const guestNote=booking ? (booking.note || '-') : '-';
+      const bookingType=booking ? (booking.type==='app'?'App':'Tin nhắn') : '-';
       
-      csvContent+=`${room},Ca ${caNum},${time[0]}-${time[1]},${guestName},"${guestNote}",${statusText}\n`;
+      csvContent+=`${room},Ca ${caNum},${time[0]}-${time[1]},${guestName},"${guestNote}",${bookingType},${statusText}\n`;
     });
   });
   
