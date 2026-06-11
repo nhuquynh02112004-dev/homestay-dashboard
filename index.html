@@ -246,14 +246,27 @@ color:#333;
 font-family:'Poppins', sans-serif;
 }
 
-.slot-guest{
+.slot-info{
 margin-top:4px;
+}
+
+.slot-guest{
 font-size:11px;
 color:#333;
 white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
 font-weight:600;
+}
+
+.slot-note{
+font-size:10px;
+color:#666;
+margin-top:2px;
+font-style:italic;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
 }
 
 .timeline{
@@ -494,6 +507,7 @@ grid-column:1 / -1;
 
 .btn-delete{
 background:#E57373;
+margin:0 !important;
 }
 
 .btn-delete:hover{
@@ -815,7 +829,7 @@ Object.entries(rooms).forEach(([room,times])=>{
     <td>
       <div class="slot" id="${room}-${index}" onclick="openPopup('${room}',${index})">
         <div class="slot-time">${time[0]} - ${time[1]}</div>
-        <div class="slot-guest" id="${room}-${index}-guest">Trống</div>
+        <div class="slot-info" id="${room}-${index}-info"></div>
       </div>
     </td>
     `;
@@ -861,9 +875,9 @@ function renderBookingSheet(){
   Object.entries(rooms).forEach(([room,times])=>{
     times.forEach((time,index)=>{
       const slot=document.getElementById(`${room}-${index}`);
-      const guestEl=document.getElementById(`${room}-${index}-guest`);
+      const infoEl=document.getElementById(`${room}-${index}-info`);
       
-      if(slot){
+      if(slot && infoEl){
         slot.className='slot';
         
         const bookingKey=`${dateKey}-${room}-${index}`;
@@ -872,21 +886,29 @@ function renderBookingSheet(){
         const bookingType=booking ? booking.type : null;
         
         if(status==='empty'){
-          guestEl.textContent='Trống';
+          infoEl.innerHTML='<div class="slot-guest">Trống</div>';
         }else if(status==='booked'){
           if(bookingType==='app'){
             slot.classList.add('booked-app');
           }else if(bookingType==='msg'){
             slot.classList.add('booked-msg');
           }
-          guestEl.textContent=booking.name;
+          let noteHtml='';
+          if(booking.note){
+            noteHtml=`<div class="slot-note">${booking.note}</div>`;
+          }
+          infoEl.innerHTML=`<div class="slot-guest">${booking.name}</div>${noteHtml}`;
         }else if(status==='checkedin'){
           if(bookingType==='app'){
             slot.classList.add('checkedin-app');
           }else if(bookingType==='msg'){
             slot.classList.add('checkedin-msg');
           }
-          guestEl.textContent=booking.name;
+          let noteHtml='';
+          if(booking.note){
+            noteHtml=`<div class="slot-note">${booking.note}</div>`;
+          }
+          infoEl.innerHTML=`<div class="slot-guest">${booking.name}</div>${noteHtml}`;
         }
       }
     });
@@ -1059,7 +1081,7 @@ function selectBookingType(type){
 
 function openPopup(room,index){
   currentSlot={room,index};
-  selectedBookingType='app'; // Reset default
+  selectedBookingType='app';
   
   const dateKey=getDateKey();
   const bookingKey=`${dateKey}-${room}-${index}`;
@@ -1068,7 +1090,6 @@ function openPopup(room,index){
   document.getElementById('popup').style.display='flex';
   document.getElementById('popupTitle').innerHTML=`${room} - Ca ${index+1}`;
   
-  // Reset button styles
   document.getElementById('btnApp').classList.remove('active-app');
   document.getElementById('btnMsg').classList.remove('active-msg');
   
@@ -1077,7 +1098,6 @@ function openPopup(room,index){
     document.getElementById('guestNote').value=booking.note||'';
     document.querySelector('.btn-delete').style.display='block';
     
-    // Set booking type nếu có
     if(booking.type==='app'){
       selectBookingType('app');
     }else if(booking.type==='msg'){
