@@ -8,6 +8,10 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
 <style>
 
 *{
@@ -775,6 +779,22 @@ font-size:11px;
 
 <script>
 
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAGWnunoFFqjSoBIa6hzbSgj4jJ8CAo4oM",
+  authDomain: "smarttest-c7381.firebaseapp.com",
+  databaseURL: "https://smarttest-c7381-default-rtdb.firebaseio.com",
+  projectId: "smarttest-c7381",
+  storageBucket: "smarttest-c7381.firebasestorage.app",
+  messagingSenderId: "476667768787",
+  appId: "1:476667768787:web:9f1f06bc7009cd81f74926",
+  measurementId: "G-Y9CJ7JGT6B"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 const rooms={
 Midori:[
 ["10:00","13:00"],
@@ -829,43 +849,39 @@ const months=[
 
 let currentMonth=new Date().getMonth()+1;
 
-function loadData(){
-  const saved=localStorage.getItem('bookings');
-  const cleanedSaved=localStorage.getItem('cleanedSlots');
-  if(saved){
-    try{
-      bookings=JSON.parse(saved);
-    }catch(e){
-      console.error('Error loading bookings:', e);
-    }
-  }
-  if(cleanedSaved){
-    try{
-      cleanedSlots=JSON.parse(cleanedSaved);
-    }catch(e){
-      console.error('Error loading cleaned slots:', e);
-    }
-  }
+// Load data from Firebase
+function loadDataFromFirebase(){
+  database.ref('bookings').on('value', (snapshot)=>{
+    bookings=snapshot.val() || {};
+    renderBookingSheet();
+    renderTimeline();
+    updateStats();
+  });
+
+  database.ref('cleanedSlots').on('value', (snapshot)=>{
+    cleanedSlots=snapshot.val() || {};
+    renderTimeline();
+  });
 }
 
-function saveData(){
-  localStorage.setItem('bookings', JSON.stringify(bookings));
-  localStorage.setItem('cleanedSlots', JSON.stringify(cleanedSlots));
+function saveDataToFirebase(){
+  database.ref('bookings').set(bookings);
+  database.ref('cleanedSlots').set(cleanedSlots);
 }
 
-loadData();
+// Initialize
+loadDataFromFirebase();
 renderMonthSelector();
 renderCalendar(currentMonth);
 renderBookingSheet();
 renderTimeline();
 updateStats();
 
-// Kiểm tra thông báo mỗi phút
+// Check notifications every minute
 setInterval(()=>{
   checkNotifications();
 }, 60000);
 
-// Kiểm tra thông báo lúc load
 checkNotifications();
 
 setInterval(()=>{
@@ -1257,7 +1273,7 @@ function doneCleaning(room,index){
   const dateKey=getDateKey();
   const bookingKey=`${dateKey}-${room}-${index}`;
   cleanedSlots[bookingKey]=true;
-  saveData();
+  saveDataToFirebase();
   renderTimeline();
 }
 
@@ -1331,7 +1347,7 @@ function saveBooking(){
     createdAt:new Date().toISOString()
   };
   
-  saveData();
+  saveDataToFirebase();
   closePopup();
   renderTimeline();
   renderBookingSheet();
@@ -1344,7 +1360,7 @@ function deleteBooking(){
     const bookingKey=`${dateKey}-${currentSlot.room}-${currentSlot.index}`;
     delete bookings[bookingKey];
     delete cleanedSlots[bookingKey];
-    saveData();
+    saveDataToFirebase();
     closePopup();
     renderTimeline();
     renderBookingSheet();
